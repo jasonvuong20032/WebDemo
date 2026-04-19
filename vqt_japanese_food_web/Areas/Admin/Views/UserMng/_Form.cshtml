@@ -1,0 +1,221 @@
+﻿@{
+    Layout = null;
+}
+@model JapaneseFood.Model.User.UserDto
+
+<div class="row form-horizontal form-label-left" style="margin-bottom:15px;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <fieldset style="width: 100%">
+                    <legend>GENERAL INFORMATION</legend>
+
+                    <div class="first-step-group-criteria" style="padding-top:10px; margin-bottom: 10px;">
+                        <div class="form-row">
+                            <div class="col-md-3 mb-3">
+                                <img id="upload-preview"
+                                     src="@Url.Content(Model.Avatar)"
+                                     height="100" width="100" />
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="upload-btn-wrapper">
+                                    <button type="button"
+                                            class="btn btn-success"
+                                            onclick="showPictureUpload();">
+                                        Upload (Recomment size px: 250 × 250)
+                                    </button>
+
+                                    <input type="file"
+                                           name="PictureUpload"
+                                           id="Avatar"
+                                           accept=".jpg"
+                                           class="d-none"
+                                           onchange="PreviewImage(this,'upload-preview')" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstname">Full Name</label>
+                                @Html.HiddenFor(model => model.Id)
+                                @Html.HiddenFor(model => model.CreatedBy)
+                                @Html.HiddenFor(model => model.CreatedAt)
+                                @Html.TextBoxFor(model => model.FullName, new
+                                {
+                                    @class = "form-control",
+                                                                @id = "fullName",
+                                                                placeholder = "Enter full name",
+                                                                @autocomplete = "off"
+                                                                })
+                                @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "label label-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="phone">Phone Number</label>
+                                @Html.TextBoxFor(model => model.PhoneNumber, new
+                                                                {
+                                    @class = "form-control",
+                                                                @id = "phone",
+                                                                placeholder = "Enter phone number",
+                                                                @autocomplete = "off"
+                                                                })
+                                @Html.ValidationMessageFor(model => model.PhoneNumber, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="email">Email</label>
+                                @Html.TextBoxFor(model => model.UserName, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter email address",
+                                    @autocomplete = "off"
+                                })
+                                @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "label label-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Role</label>
+                                @Html.DropDownListFor(
+                                    model => model.RoleId,
+                                    new SelectList(Model.ListRoles, "Value", "Text", Model.RoleId),
+                                    null,
+                                    new
+                                    {
+                                        @class = "form-control cc-select2 custom-select",
+                                        @style = "width:100%;"
+                                    })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password">Password</label>
+                                @Html.PasswordFor(model => model.Password, new
+                                                                {
+                                    @class = "form-control",
+                                                                @id = "password",
+                                                                placeholder = "Enter password",
+                                                                @autocomplete = "off"
+                                                                })
+                                @Html.ValidationMessageFor(model => model.Password, null, new { @class = "label label-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="confirmpassword">Confirm Password</label>
+                                @Html.PasswordFor(model => model.ConfirmPassword, new
+                                                                {
+                                    @class = "form-control",
+                                                                @id = "confirmpassword",
+                                                                placeholder = "Confirm password",
+                                                                @autocomplete = "off"
+                                                                })
+                                @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="address">Address</label>
+                                @Html.TextBoxFor(model => model.Address, new
+                                {
+                                    @class = "form-control",
+                                    @id = "address",
+                                    placeholder = "Enter address",
+                                    @autocomplete = "off"
+                                })
+                                @Html.ValidationMessageFor(model => model.Address, null, new { @class = "label label-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="birthday">Date of Birth</label>
+                                <div class="input-group date datetimepicker3" data-date-format="dd-mm-yyyy">
+                                    @Html.TextBoxFor(model => model.BirthDate, new
+                                                                        {
+                                        @class = "form-control",
+                                                                        placeholder = "Date of birth",
+                                                                        @autocomplete = "off"
+                                                                        })
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.BirthDate, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="col-md-2 mb-3">Gender</label>
+                            <div class="col-md-10 mb-3">
+                                <div class="form-row">
+                                    <div class="col-md-4">
+                                        @Html.RadioButtonFor(model => model.Gender,
+                                                                                (int)JapaneseFood.Common.Enums.EnumCommons.EGender.Male,
+                                                                                new { @id = "male", @class = "custom-control-input" })
+                                        <label class="custom-control-label" for="male">Male</label>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        @Html.RadioButtonFor(model => model.Gender,
+                                                                                (int)JapaneseFood.Common.Enums.EnumCommons.EGender.FeMale,
+                                                                                new { @id = "female", @class = "custom-control-input" })
+                                        <label class="custom-control-label" for="female">Female</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBoxFor(model => model.IsActive,
+                                                                        new { @class = "icheck custom-control-input", @id = "active" })
+                                    <label class="custom-control-label" for="active">Active</label>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="text-right">
+                    <a href="@Url.Action("Index", "UserMng")" class="btn btn-default">Cancel</a>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#password').val('@Model.Password');
+        $('#confirmpassword').val('@Model.ConfirmPassword');
+
+         $('#BirthDate').datetimepicker({
+            format: 'DD-MM-YYYY'
+        });
+        var isEdit = @Model.Id > 0 ? true : false;
+        if (isEdit)
+        {
+            $('#UserName').prop('readonly', true);
+        }
+    });
+
+    function showPictureUpload() {
+        $('[id=Avatar]').click();
+    }
+
+    function PreviewImage(e, previewElementID) {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(e.files[0]);
+
+        oFReader.onload = function (oFREvent) {
+            document.getElementById(previewElementID).src = oFREvent.target.result;
+        };
+    };
+
+</script>

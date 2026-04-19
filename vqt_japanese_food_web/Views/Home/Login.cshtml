@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+<div class="breadcrumb-shop">
+    <div class="padding-lf-40 clearfix">
+        <div class=" ">
+            <ol class="breadcrumb breadcrumb-arrows clearfix">
+                <li><a href="/" target="_self"><i class="fa fa-home"></i> Home</a></li>
+                <li class="active"><span>Login</span></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="pd-page">
+        <div class="container">
+            <div class="heading-pageNew">
+                <div class="header-pageCart">
+                    <span class="count-cart">Please enter your credentials to login</span>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-xs-12 col-sm-6">
+                    <form id="loginForm" method="post">
+                        <div class="cart-container">
+
+                            <div class="main-content-cart">
+                                <table class="table-cart" style="margin-bottom: 0px !important; ">
+                                    <tbody>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="username">Username</label>
+                                                <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="password">Password</label>
+                                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="cart-buttons" style="text-align: center; ">
+                                    <button type="submit" id="btnLogin" class="button dark">Login</button>
+                                    <a class="link-continue" href="@Url.Action("Index", "Home")" title="Back to Home">Back to Home</a>
+                                </div>
+
+                                <div id="loginMessage" style="color:red;margin-top:10px; text-align: center;"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#loginForm").submit(function (e) {
+                e.preventDefault();
+
+                var username = $("#username").val();
+                var password = $("#password").val();
+
+                $.ajax({
+                    url: '@Url.Action("Login", "Home")',
+                    type: 'POST',
+                    data: { username: username, password: password },
+                    success: function (res) {
+                        if (res.success) {
+                            // login thành công
+                            $("#loginMessage").css("color", "green").text("Login successful! Redirecting...");
+                            setTimeout(function () {
+                                window.location.href = "@Url.Action("Index", "Home")";
+                            }, 1000);
+                        } else {
+                            // login thất bại
+                            $("#loginMessage").css("color", "red").text(res.message);
+                        }
+                    },
+                    error: function () {
+                        $("#loginMessage").css("color", "red").text("An error occurred. Please try again.");
+                    }
+                });
+            });
+        });
+    </script>
+}

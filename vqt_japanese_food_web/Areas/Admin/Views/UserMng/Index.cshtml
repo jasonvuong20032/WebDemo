@@ -1,0 +1,99 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@model List<JapaneseFood.Model.User.UserDto>
+
+<div class="account-management">
+    @await Html.PartialAsync(
+    "_breadcrumb",
+        new Dictionary<string, string>
+        {
+        { "A", "Home" },
+        { "B", "User Management" }
+        },
+        new ViewDataDictionary(ViewData)
+        {
+        { "mHref", Url.Action("New", "UserMng", new { area = "Admin" }) },
+        { "mShowButton", "true" }
+        })
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive m-t-40">
+                        <table id="config-table" class="table display table-bordered table-striped no-wrap">
+                            <thead>
+                                <tr>
+                                    <th>.No</th>
+                                    <th>Image</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                                    <th>Status</th>
+                                    <th style="width: 13%;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    int index = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@index</td>
+                                            <td><img style="width: 62px; border-radius: 50%;" src="@Url.Content(item.Avatar)" alt="@item.FullName" /></td>
+                                            <td>@item.FullName</td>
+                                            <td>@item.UserName</td>
+                                            <td>@item.PhoneNumber</td>
+                                            <td>
+                                                @if (item.IsActive)
+                                                {
+                                                    <label class="btn btn-default btn-sm">
+                                                        <i class="fa fa-lg fa-toggle-on text-success"></i>
+                                                    </label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="btn btn-default btn-sm">
+                                                        <i class="fa fa-lg fa-toggle-off text-danger"></i>
+                                                    </label>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-3 pull-right">
+                                                    <a href="@Url.Action("Edit", "UserMng", new { Id = item.Id })"
+                                                       class="btn btn-default btn-sm"
+                                                       data-toggle="tooltip"
+                                                       data-placement="bottom"
+                                                       title="Update user information">
+                                                        <i class="fas fa-fw fa-pencil-alt text-success"></i>
+                                                    </a>
+                                                    <a href="@Url.Action("Destroy", "UserMng", new { Id = item.Id })"
+                                                       class="btn btn-default btn-sm"
+                                                       data-confirm="Are you sure?"
+                                                       data-toggle="tooltip"
+                                                       data-placement="bottom"
+                                                       title="Delete user account">
+                                                        <i class="fa fa-fw fa-trash text-danger"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        index++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#config-table').DataTable({
+        responsive: true
+    });
+</script>

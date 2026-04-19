@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewBag.Title = "Carts";
+}
+
+<div class="breadcrumb-shop">
+    <div class="padding-lf-40 clearfix">
+        <div class=" ">
+            <ol class="breadcrumb breadcrumb-arrows clearfix">
+                <li><a href="/" target="_self"><i class="fa fa-home"></i> Home</a></li>
+                @*<li><a href="javascript:void(0)" target="_self">Carts</a></li>*@
+                <li class="active"><span>Cart</span></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="pd-page">
+        <div class="container">
+            <div class="heading-pageNew">
+                <div class="header-pageCart">
+                    <h1>Your Shopping Cart</h1>
+                    <span class="count-cart">(You have <b>0</b> items in your cart)</span>
+                </div>
+            </div>
+            <div class="row">
+                <form action="" method="post" id="cartformpage">
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="cart-container hidden">
+                            <div class="cart-col-left">
+                                <div class="main-content-cart">
+                                    <table class="table-cart">
+                                        <thead>
+                                            <tr>
+                                                <th width="20%" class="image">&nbsp;</th>
+                                                <th width="40%" class="item">Product Name</th>
+                                                <th width="20%" class="quantity">Quantity</th>
+                                                <th width="20%" class="remove">&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="updateItem">
+                                        </tbody>
+                                    </table>
+                                    @*<div class="checkout-note clearfix">
+                                            <label>Order Note</label>
+                                            <textarea id="note" name="note" rows="8" cols="50" placeholder="If you have any other requests when receiving the order, please enter them here"></textarea>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span12 expanded-message text-center hidden">
+                            Your cart is currently empty
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="boxRightCart clearfix">
+                            <div class="titleInfoCart">
+                                ORDER SUMMARY
+                            </div>
+                            <div class="summary-subtotal clearfix">
+                                <p class="order-infor">
+                                    <span class="titleOrder">Subtotal:</span>
+                                    <span class="valOrder total_price noBold"><b>0₫</b></span>
+                                </p>
+                                <p class="order-infor">
+                                    <span class="titleOrder">Shipping Fee:</span>
+                                    <span class="valOrder">Free</span>
+                                </p>
+                                <p class="order-infor boldPrice">
+                                    <span class="titleOrder"><b>Total:</b></span>
+                                    <span class="valOrder total_price"><b>0₫</b></span>
+                                </p>
+                            </div>
+                            <div class="note-subtotal clearfix">
+                                <i>You can enter discount codes at the checkout page</i>
+                            </div>
+                            <div class="cart-buttons">
+                                <a class="linktocheckout button dark" href="@Url.Action("CheckOut", "Cart")" id="checkout" name="checkout">Proceed to Checkout</a>
+                                @*<button type="submit" id="checkout" name="checkout" class="checkLimitCart">Proceed to Checkout</button>*@
+                                <a class="link-continue" href="@Url.Action("Index", "Home")" title="Continue Shopping">Continue Shopping</a>
+                            </div>
+                        </div>
+                        <ul class="policyProduct policyCart clearfix">
+                            <li>
+                                <!-- Free Shipping Icon SVG -->
+                                <span class="infoPolicy">
+                                    <h5>
+                                        FREE SHIPPING NATIONWIDE
+                                    </h5>
+                                    <span>(For orders over 300,000₫)</span>
+                                </span>
+                            </li>
+                            <li>
+                                <!-- Easy Returns Icon SVG -->
+                                <span class="infoPolicy">
+                                    <h5>
+                                        EASY RETURNS
+                                    </h5>
+                                    <span>(90 days for shoes and 30 days for bags)</span>
+                                </span>
+                            </li>
+                            <li>
+                                <!-- Sales Hotline Icon SVG -->
+                                <span class="infoPolicy">
+                                    <h5>
+                                        SALES HOTLINE 1800 1162
+                                    </h5>
+                                    <span>(Free from 8:00 AM - 9:00 PM daily)</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var dataProduct = vuongQuangTuan.getListOrder();
+
+        if (dataProduct != null && dataProduct != undefined && dataProduct.length > 0) {
+
+            LoadProductData(dataProduct);
+        }
+        ShowEmpty(dataProduct);
+    })
+    function ShowEmpty(dataProduct) {
+        if (dataProduct != null && dataProduct != undefined && dataProduct.length > 0) {
+            $("form .expanded-message").addClass("hidden");
+            $("form .cart-container").removeClass("hidden");
+        } else {
+            $("form .expanded-message").removeClass("hidden");
+            $("form .cart-container").addClass("hidden");
+        }
+    }
+    function LoadProductData(dataProduct) {
+        var htmlTemplate = "";
+        ShowEmpty(dataProduct);
+        if (dataProduct != null && dataProduct != undefined) {
+            $.each(dataProduct, function (index, value) {
+                htmlTemplate += '<tr class="clearfix line-item-container" data-variant-id="' + value.Id + '">'
+                    + ' <td class="image imageVariantCart">'
+                    + '     <div class="product_image"><a href="' + value.LinkURL + '"><img src="' + value.ImageURL + '" alt="' + value.Name + '"></a></div>'
+                    + ' </td>'
+                    + ' <td class="item itemVariantCart">'
+                    + '     <a href="' + value.LinkURL + '"><h3>' + value.Name + '</h3></a>'
+                    + '     <a href="javascript:void(0)" data-variant="' + value.Id + '" class="removePro deleteItem">Delete</a>'
+                    + ' </td>'
+                    + ' <td class="removeInMobile hidden-xs quantity quantityVariantCart partentBtnQuantity">'
+                    + '     <div class="qty quantity-partent qty-click clearfix">'
+                    + '         <button type="button" class="qtyminus qty-btn">-</button>'
+                    + '         <input readonly="" type="text" size="4" min="1" id="updates_' + value.Id + '" data-price="' + value.Price + '" value="' + value.Qty + '" class="tc line-item-qty item-quantity">'
+                    + '         <button type="button" class="qtyplus qty-btn">+</button>'
+                    + '     </div>'
+                    + ' </td>'
+                    + ' <td class="hidden-xs totalLinePriceVariantCart">'
+                    + '     <p class="price"><span class="line-item-total" id="price-cart-' + value.Id + '">' + NumberFormat((value.Price * value.Qty)) + '₫</span></p>'
+                    + ' </td>'
+                    + '</tr>';
+            })
+        }
+
+        $(".table-cart tbody.updateItem").html(htmlTemplate);
+        UpdateTotalCount(dataProduct);
+        InitEventOnCart();
+
+    }
+    function UpdateTotalCount(dataProduct) {
+        var totalQuantity = 0;
+        var totalPrice = 0;
+        if (dataProduct != null && dataProduct != undefined && dataProduct.length > 0) {
+            $.each(dataProduct, function (index, value) {
+                totalQuantity += value.Qty;
+                totalPrice += (value.Qty * value.Price)
+            })
+        }
+        $(".count-cart b, span.count").html(totalQuantity);
+        $(".summary-subtotal .total_price b").text(NumberFormat(totalPrice) + "₫")
+    }
+    function InitEventOnCart() {
+        $('.qty-click .qtyplus').on('click', function (e) {
+            e.preventDefault();
+            var input = $(this).parent('.quantity-partent').find('input');
+            var idPrice = input.attr("id").replace('updates_', '');
+            var price = parseFloat(input.attr("data-price"));
+            var currentVal = parseInt(input.val());
+            var quantity = 1;
+            if (!isNaN(currentVal)) {
+                quantity = currentVal + 1;
+            }
+            input.val(quantity);
+            $("#price-cart-" + idPrice).text(NumberFormat(price * quantity) + "₫");
+            vuongQuangTuan.updateQtyOrder(idPrice, quantity);
+            UpdateTotalCount(vuongQuangTuan.getListOrder());
+        });
+        $(".qty-click .qtyminus").on('click', function (e) {
+            e.preventDefault();
+            var input = $(this).parent('.quantity-partent').find('input');
+            var idPrice = input.attr("id").replace('updates_', '');
+            var price = parseFloat(input.attr("data-price"));
+            var currentVal = parseInt(input.val());
+            var quantity = 1;
+            if (!isNaN(currentVal) && currentVal > 1) {
+                quantity = currentVal - 1;
+            }
+            input.val(quantity);
+            $("#price-cart-" + idPrice).text(NumberFormat(price * quantity) + "₫");
+            vuongQuangTuan.updateQtyOrder(idPrice, quantity);
+            UpdateTotalCount(vuongQuangTuan.getListOrder());
+        });
+        $(".itemVariantCart .deleteItem").on('click', function (e) {
+            e.preventDefault();
+            var idPro = $(this).attr('data-variant');
+            vuongQuangTuan.deleteOrder(idPro);
+            var dataProduct = vuongQuangTuan.getListOrder();
+            UpdateTotalCount(dataProduct);
+            LoadProductData(dataProduct);
+        });
+    }
+</script>

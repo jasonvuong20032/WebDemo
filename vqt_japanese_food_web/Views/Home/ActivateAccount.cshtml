@@ -1,0 +1,101 @@
+﻿@model JapaneseFood.Model.Order.ActivateUserDto
+
+<div class="breadcrumb-shop">
+    <div class="padding-lf-40 clearfix">
+        <ol class="breadcrumb breadcrumb-arrows clearfix">
+            <li><a href="/" target="_self"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active"><span>Activate Account</span></li>
+        </ol>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="pd-page">
+        <div class="container">
+            <div class="heading-pageNew">
+                <div class="header-pageCart">
+                    <span class="count-cart">Please enter the activation code sent to your email</span>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-xs-12 col-sm-6">
+                    <form id="activateForm" method="post">
+                        <div class="cart-container">
+                            <div class="main-content-cart">
+                                <table class="table-cart" style="margin-bottom: 0px !important;">
+                                    <tbody>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="username">Username</label>
+                                                <input type="text" id="username" name="username"
+                                                       class="form-control"
+                                                       value="@Model.UserName"
+                                                       readonly required />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="activationCode">Activation Code</label>
+                                                <input type="text" id="activationCode" name="code"
+                                                       class="form-control"
+                                                       placeholder="Enter code from email" required />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="cart-buttons" style="text-align: center;">
+                                    <button type="submit" id="btnActivate" class="button dark">Activate Account</button>
+                                    <a class="link-continue" href="@Url.Action("Index", "Home")" title="Back to Home">Back to Home</a>
+                                </div>
+
+                                <div id="activateMessage" style="color:red;margin-top:10px; text-align: center;"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#activateForm").submit(function (e) {
+                e.preventDefault();
+
+                var username = $("#username").val();
+                var code = $("#activationCode").val();
+
+                if (!code) {
+                    $("#activateMessage").css("color", "red").text("Please enter the activation code.");
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("ActivateAccount", "Home")',
+                    type: 'POST',
+                    data: { UserName: username, Code: code },
+                    success: function (res) {
+                        if (res.success) {
+                            $("#activateMessage").css("color", "green")
+                                .text(res.message + " Redirecting to login...");
+                            setTimeout(function () {
+                                window.location.href = "@Url.Action("Login", "Home")";
+                            }, 1500);
+                        } else {
+                            $("#activateMessage").css("color", "red").text(res.message);
+                        }
+                    },
+                    error: function () {
+                        $("#activateMessage").css("color", "red")
+                            .text("An error occurred. Please try again.");
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,155 @@
+﻿@model vqt_japanese_food_web.Models.HomeViewModels
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+
+<div>
+    @if (Model.Products != null && Model.Products.Any())
+    {
+        foreach (var catalog in Model.Products)
+        {
+            if (catalog.Categories != null)
+            {
+                foreach (var category in catalog.Categories)
+                {
+                    <main class="row" data-catalogId="@catalog.Id" data-categoryId="@category.Id">
+                        <div id="collection" class="collection-page">
+                            <div class="main-content clearfix">
+                                <div class="banner-collection-header">
+                                </div>
+                                <div class="padding-lf-40 clearfix">
+                                    <div id="collection-body" class="wrap-collection-body clearfix">
+                                        <div class="wrap-collection-title clearfix">
+                                            <div class="heading-collection clearfix">
+                                                <div class="col-md-8 col-sm-12 col-xs-12">
+                                                    <div><h5>@catalog.Name - @category.Name</h5></div>
+                                                </div>
+
+                                                <div class="col-md-4 col-sm-12 col-xs-12">
+                                                    <div class="outerSort">
+                                                        <div class="borderFilterMobile visbile-xs visible-sm filterSmallScreen">
+                                                            <a class="filterClick">
+                                                                <i class="fa fa-filter"></i>
+                                                                <span class="visible-xs">Filter</span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="borderFilterMobile option browse-tags">
+                                                            <label class="lb-filter" for="sort-by">Sort by:</label>
+                                                            <span class="custom-dropdown custom-dropdown--grey">
+                                                                <span class="visible-xs btnSortMobile">
+                                                                    <i class="fa fa-sort"></i>
+                                                                </span>
+                                                                <select class="sort-by custom-dropdown__select">
+                                                                    <option value="newest">New</option>
+                                                                    <option value="price_asc">Price: Low to High</option>
+                                                                    <option value="price_desc">Price:High to Low</option>
+                                                                </select>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="content-data-product_@catalog.Id-@category.Id">
+                                            @await Html.PartialAsync("_ListItem", category.Products)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                }
+            }
+        }
+    }    
+</div>
+
+<script>
+    /* =========================
+       STICKY FILTER (OPTIONAL)
+    ========================= */
+    function initStickyFilter() {
+        if ($(window).width() > 992) {
+            $('.sidebarFilter').addClass('sticky');
+        } else {
+            $('.sidebarFilter').removeClass('sticky');
+        }
+    }
+
+    /* =========================
+       DOCUMENT READY
+    ========================= */
+    $(document).ready(function () {
+
+        initStickyFilter();
+        $(window).resize(initStickyFilter);
+
+        /* SORT MOBILE */
+        $(document).on('click', '.btnSortMobile', function () {
+            $(this).closest('main').find('.sort-by').trigger('click');
+        });
+
+    });
+
+    /* =========================
+       SORT CHANGE (PER MAIN)
+    ========================= */
+    $(document).on('change', '.sort-by', function () {
+
+        var $main = $(this).closest('main');
+
+        var filters = buildFilter($main);
+        loadProducts($main, filters);
+    });
+
+    /* =========================
+       BUILD FILTER OBJECT
+    ========================= */
+    function buildFilter($main) {
+        return {
+            catalogId: $main.data('catalogid'),
+            categoryId: $main.data('categoryid'),
+            sorting: $main.find('.sort-by').val()
+        };
+    }
+
+    /* =========================
+       AJAX LOAD PRODUCT
+    ========================= */
+    function loadProducts($main, filters) {
+        var targetClass = '.content-data-product_'
+                        + filters.catalogId
+                        + '-'
+                        + filters.categoryId;
+        $.ajax({
+            url: '@Url.Action("Filter", "Home")',
+            type: 'POST',
+            data: filters,
+            success: function (html) {
+                $main.find(targetClass).html(html);
+                afterFilter($main);
+            }
+        });
+    }
+
+    /* =========================
+       AFTER FILTER
+    ========================= */
+    function afterFilter($main) {
+
+        if (typeof lazyload === 'function') {
+            lazyload();
+        }
+
+        if (window.vuongQuangTuan) {
+            vuongQuangTuan.Main.resizeImage();
+            vuongQuangTuan.Main.colorVariant();
+        }
+
+        if ($(window).width() > 1025) {
+            var height = $main.find(".pro-loop:not(.largeproduct)").outerHeight();
+            $main.find(".fixBox .largeproduct").css("height", height * 2 + 40);
+        }
+    }
+</script>

@@ -1,0 +1,95 @@
+﻿@{
+    Layout = null;
+}
+@model List<JapaneseFood.Model.Product.ProductDto>
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+<div class="clearfix filter-here 62-53">
+    <div class="content-product-list product-list filter clearfix fixBox">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var product in Model)
+            {
+                bool hasSale =
+                product.IsOnSale &&
+                product.SalePrice.HasValue &&
+                product.SalePrice < product.Price;
+
+                int discountPercent = hasSale
+                ? (int)Math.Round(
+                (product.Price - (product.SalePrice ?? 0))
+                / product.Price * 100
+                )
+                : 0;
+
+                <div class="product-resize col-md-3 col-sm-3 col-xs-6 pro-loop">
+
+                    <div class="product-block" data-anmation="1">
+                        <div class="product-img image-resize">
+                            <a class="quickView styleBtnBuy notClick" data-handle="@Url.Action("Quickview", "Home", new { q = product.Id })">
+                                <picture>
+                                    <img class="img-loop lazyload" src="@Url.Content(product.ImageUrl)" data-src="@Url.Content(product.ImageUrl)" alt="@product.Name" />
+                                </picture>
+
+                                <picture>
+                                    <img class="img-loop img-hover lazyload" src="@Url.Content(product.ImageUrl)" data-src="@Url.Content(product.ImageUrl)" alt="@product.Name" />
+                                </picture>
+                            </a>
+                        </div>
+                        <div class="product-detail clearfix">
+                            <div class="box-pro-detail">
+                                <h3 class="pro-name">
+                                    <a class="quickView styleBtnBuy notClick" data-handle="@Url.Action("Quickview", "Home", new { q = product.Id })">
+                                        @product.Name
+                                    </a>
+                                    <p class="pro-code">
+                                        Code: <strong>@product.Code</strong>
+                                    </p>
+
+                                </h3>
+                                <div class="box-pro-prices">
+                                    @if (hasSale)
+                                    {
+                                        <p class="pro-price-old" style="text-decoration: line-through; color: red;">
+                                            @String.Format(info, "{0:c0}", product.Price)
+                                        </p>
+                                        <p class="pro-price highlight">
+                                            @String.Format(info, "{0:c0}", product.SalePrice) - <span class="label-sale">(@discountPercent%)</span>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="pro-price highlight">
+                                            @String.Format(info, "{0:c0}", product.Price)
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        @if (product.IsAvailable)
+                        {
+                            <div class="activeLabelStatus">
+                                <div class="labelNewNew styleTogetherLabel">In stock</div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="activeLabelStatus">
+                                <div class="labelNewNew styleTogetherLabel">Out of stock</div>
+                            </div>
+                        }
+                        <div class="actionLoop visible-lg">
+                            <a class="quickView styleBtnBuy notClick" data-handle="@Url.Action("Quickview", "Home", new { q = product.Id })"><i class="fa fa-shopping-cart"></i>&nbsp; View Detail</a>
+                            @* <a class="styleBtnBuy" href="@Url.Action("Detail", "Product", new { q = product.Id })"><i class="fa fa-eye"></i> Detail</a> *@
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    @*<div class="btnLoadMore">
+            <img src="//file.hstatic.net/1000360430/file/down-arrow.png" alt="Down Arrow" /><br>
+            <a href="javascript:void(0);">Xem thêm!</a>
+        </div>*@
+</div>

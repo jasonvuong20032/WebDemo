@@ -1,0 +1,754 @@
+﻿.label:empty {
+    display: none;
+}
+
+.bangXepHang .rCont {
+    height: 250px;
+    overflow: auto;
+    /* Track */
+    /* Handle */
+    /* Handle on hover */
+}
+
+    .bangXepHang .rCont::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .bangXepHang .rCont::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .bangXepHang .rCont::-webkit-scrollbar-thumb {
+        background: #4fafaf;
+    }
+
+        .bangXepHang .rCont::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+.bangXepHang .scBar {
+    margin-bottom: 25px !important;
+}
+
+    .bangXepHang .scBar .lbl {
+        width: 40% !important;
+        text-align: left !important;
+    }
+
+    .bangXepHang .scBar .chart {
+        width: 60% !important;
+    }
+
+.bangXepHang.bangXepHang2 .rCont {
+    /* Track */
+    /* Handle */
+    /* Handle on hover */
+}
+
+    .bangXepHang.bangXepHang2 .rCont::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .bangXepHang.bangXepHang2 .rCont::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .bangXepHang.bangXepHang2 .rCont::-webkit-scrollbar-thumb {
+        background: #ff545d;
+    }
+
+        .bangXepHang.bangXepHang2 .rCont::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+.bangXepHang.bangXepHang2 .scBar .bar {
+    background: #ff545d !important;
+}
+
+.bangXepHang .scrollable {
+    width: 100%;
+    overflow: hidden;
+}
+
+.bangXepHang .rHead {
+    font-weight: bold;
+    border-bottom: solid 1px #ecedef;
+    padding: 5px 0px;
+}
+
+.bangXepHang .rItem {
+    border-bottom: solid 1px #ecedef;
+    padding: 5px 0px;
+    line-height: 20px;
+    font-size: 0.875em;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+    .bangXepHang .rItem.active, .bangXepHang .rItem:hover {
+        background: #f5f5f5;
+    }
+
+    .bangXepHang .rItem i {
+        font-size: 0.875em;
+        font-style: normal;
+    }
+
+.dichVuPage .col {
+    width: 25%;
+    float: left;
+    padding: 0px 7px;
+}
+
+.dichVuPage .dichVuItem {
+    padding: 25px;
+    background: #fff;
+    border: solid 1px #ebebed;
+    transition: all 0.3s;
+}
+
+    .dichVuPage .dichVuItem:hover {
+        box-shadow: 0px 5px 29px 0px rgba(0, 0, 0, 0.12);
+    }
+
+    .dichVuPage .dichVuItem .head {
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: solid 2px #eaeaec;
+    }
+
+        .dichVuPage .dichVuItem .head .title {
+            font-weight: bold;
+            font-size: 1.75em;
+            margin-bottom: 5px;
+        }
+
+            .dichVuPage .dichVuItem .head .title.vip {
+                color: #dd3333;
+            }
+
+        .dichVuPage .dichVuItem .head .price {
+            font-weight: bold;
+            margin-bottom: 0px;
+        }
+
+            .dichVuPage .dichVuItem .head .price .line {
+                text-decoration: line-through;
+                font-weight: lighter;
+                color: #ffc602;
+            }
+
+        .dichVuPage .dichVuItem .head span {
+            font-weight: 600;
+        }
+
+    .dichVuPage .dichVuItem .cont {
+        height: 360px;
+    }
+
+        .dichVuPage .dichVuItem .cont p {
+            line-height: 18px;
+            min-height: 36px;
+            font-size: 0.75em;
+            padding-left: 23px;
+            margin-bottom: 10px;
+            position: relative;
+            font-weight: 600;
+        }
+
+            .dichVuPage .dichVuItem .cont p:before {
+                content: "\f00c";
+                color: #dd3333;
+                position: absolute;
+                left: 0;
+                top: 3px;
+                display: inline-block;
+                font: normal normal normal 14px/1 FontAwesome;
+                font-size: inherit;
+                text-rendering: auto;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+    .dichVuPage .dichVuItem .actions .btn {
+        width: 100%;
+        background: #fff;
+        border-radius: 5px;
+        border: solid 2px #dd3333;
+        background: #dd3333;
+        font-weight: 600;
+        color: #fff !important;
+        height: 35px;
+        line-height: 33px;
+        padding: 0px !important;
+        text-transform: none;
+        font-size: 14px;
+    }
+
+        .dichVuPage .dichVuItem .actions .btn.btn-primary {
+            background: #4267b2;
+            border: solid 1px #4267b2 !important;
+        }
+
+        .dichVuPage .dichVuItem .actions .btn:hover {
+            border-color: #6c1db0;
+            background: #6c1db0;
+        }
+
+        .dichVuPage .dichVuItem .actions .btn.current {
+            color: #7d7c7c !important;
+            border: solid 2px #eaeaec !important;
+            background: #f6f6f6 !important;
+        }
+
+.formDangKy {
+    box-shadow: 0px 5px 21px 0px rgba(0, 0, 0, 0.1);
+    background: url("../images/bgDangKy.jpg") no-repeat top right;
+    max-height: 830px;
+    padding-right: 150px;
+}
+
+    .formDangKy form {
+        padding: 50px;
+        background: #fff;
+    }
+
+        .formDangKy form .title {
+            font-weight: bold;
+            font-size: 1.75em;
+            margin-bottom: 5px;
+        }
+
+        .formDangKy form .des {
+            font-weight: 600;
+            color: #979797;
+            margin-bottom: 25px;
+        }
+
+        .formDangKy form .lbl {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .formDangKy form .form-control {
+            background: #f6f6f6;
+            border-radius: 5px;
+            border: solid 2px #dadada;
+            margin-bottom: 25px;
+        }
+
+        .formDangKy form .dieukhoan label {
+            font-weight: 600 !important;
+            color: #979797;
+            transition: all 0.3s;
+        }
+
+            .formDangKy form .dieukhoan label:hover {
+                color: #333;
+            }
+
+            .formDangKy form .dieukhoan label a {
+                color: #dd3333 !important;
+            }
+
+                .formDangKy form .dieukhoan label a:hover {
+                    text-decoration: underline;
+                }
+
+        .formDangKy form .btn {
+            width: 100%;
+            background: #eb0f0e !important;
+            text-align: center;
+            border-radius: 3px;
+            font-size: 16px;
+            height: 45px;
+            line-height: 45px;
+            padding: 0px 20px;
+            text-transform: none;
+        }
+
+            .formDangKy form .btn .fa {
+                line-height: 45px;
+            }
+
+            .formDangKy form .btn:hover {
+                color: #fff !important;
+            }
+
+.datHangThanhCong {
+    background-color: white;
+    box-shadow: 0px 5px 21px 0px rgba(0, 0, 0, 0.1);
+    border-top: solid 6px #e50b0c;
+}
+
+    .datHangThanhCong .head {
+        text-align: center;
+        padding: 30px;
+        padding-bottom: 15px;
+        border-bottom: solid 1px #dadada;
+    }
+
+        .datHangThanhCong .head .title {
+            font-size: 1.75em;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0px;
+        }
+
+    .datHangThanhCong .cont {
+        padding: 25px 35px;
+        border-bottom: solid 1px #dadada;
+    }
+
+    .datHangThanhCong .foot {
+        text-align: center;
+        padding: 25px;
+    }
+
+    .datHangThanhCong .footerBar {
+        background: #faf5f5;
+        line-height: 35px;
+        text-align: center;
+    }
+
+.indexNews {
+    margin-bottom: 30px;
+}
+
+.news, .news2, .news3, .chibaoItem {
+    margin-bottom: 30px;
+}
+
+    .news .photo, .news2 .photo, .news3 .photo, .chibaoItem .photo {
+        margin-bottom: 10px;
+        margin-bottom: 10px;
+    }
+
+    .news .content, .news2 .content, .news3 .content, .chibaoItem .content {
+        line-height: 25px;
+        height: 210px;
+        overflow: hidden;
+    }
+
+    .news .title, .news2 .title, .news3 .title, .chibaoItem .title {
+        font-weight: 600;
+        font-size: 1.125em;
+        margin: 0px;
+        margin-bottom: 5px;
+        overflow: hidden;
+    }
+
+    .news .info, .news2 .info, .news3 .info, .chibaoItem .info {
+        color: #777;
+        font-size: 0.875em;
+        font-weight: lighter;
+        margin-bottom: 5px;
+    }
+
+    .news .des, .news2 .des, .news3 .des, .chibaoItem .des {
+        overflow: hidden;
+        margin-bottom: 10px;
+        text-align: justify;
+    }
+
+.news2 {
+    font-size: 0.875em;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+    .news2 .row {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+
+        .news2 .row > div {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+    .news2 .photo {
+        float: left;
+        margin-bottom: 0px;
+    }
+
+.news3 {
+    font-size: 0.875em;
+    margin-bottom: 15px;
+}
+
+    .news3 .photo {
+        width: 100%;
+        float: left;
+    }
+
+    .news3 .content {
+        height: 80px;
+        line-height: 20px;
+    }
+
+.newsFirst .title {
+    height: 50px;
+}
+
+.newsFirst .des {
+    height: 100px;
+    overflow: hidden;
+    text-align: justify;
+}
+
+.newsPhoto .photo {
+    position: relative;
+}
+
+    .newsPhoto .photo > a {
+        position: relative;
+    }
+
+        .newsPhoto .photo > a:before {
+            /*content: '';*/
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0.63) 97%, rgba(0, 0, 0, 0.65) 100%);
+            background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0.63) 97%, rgba(0, 0, 0, 0.65) 100%);
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0.63) 97%, rgba(0, 0, 0, 0.65) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 );
+            z-index: 1;
+        }
+
+    .newsPhoto .photo .des {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        width: 100%;
+        padding: 20px 25px;
+        color: #fff;
+        z-index: 2;
+        text-align: justify;
+    }
+
+        .newsPhoto .photo .des .title {
+            font-weight: 600;
+        }
+
+        .newsPhoto .photo .des p {
+            margin-bottom: 0px;
+        }
+
+        .newsPhoto .photo .des a {
+            color: #fff;
+        }
+
+.tinGanDay .row {
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+    .tinGanDay .row > div {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+.tinGanDay .newsPhoto {
+    margin-bottom: 10px;
+}
+
+    .tinGanDay .newsPhoto .photo {
+        overflow: hidden;
+    }
+
+        .tinGanDay .newsPhoto .photo > a {
+            overflow: hidden;
+        }
+
+            .tinGanDay .newsPhoto .photo > a img {
+                transition: all 0.3s;
+                transform: scale(1);
+                width: 100%;
+            }
+
+    .tinGanDay .newsPhoto .des {
+        transition: all 0.3s;
+        line-height: 25px;
+        padding-bottom: 0px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+        .tinGanDay .newsPhoto .des .cat a {
+            float: none;
+            font-weight: lighter;
+            font-size: 0.75em;
+            background: #ffc602;
+            color: #000000;
+            line-height: 25px;
+            padding: 0px 5px;
+            width: auto;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .tinGanDay .newsPhoto .des .info {
+            transition: all 0.3s;
+            margin-bottom: -25px;
+            font-size: 0.875em;
+            font-weight: lighter;
+        }
+
+    .tinGanDay .newsPhoto:hover .photo > a {
+        overflow: hidden;
+    }
+
+        .tinGanDay .newsPhoto:hover .photo > a img {
+            transform: scale(1.1);
+        }
+
+    .tinGanDay .newsPhoto:hover .des .info {
+        margin-bottom: 0px;
+    }
+
+.chibaoItem .title {
+    width: 100%;
+    float: left;
+    height: 25px;
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+.chibaoItem .actions {
+    width: 100%;
+    float: left;
+    margin-bottom: 10px;
+}
+
+    .chibaoItem .actions .btn {
+        float: left;
+    }
+
+.chibaoItem .info {
+    width: 100%;
+    float: left;
+}
+
+    .chibaoItem .info .ratedStars {
+        color: #ffcf10;
+        float: left;
+    }
+
+.chiBaoTabs {
+    margin-top: 15px;
+}
+
+    .chiBaoTabs .nav {
+        background: none;
+        position: relative;
+    }
+
+        .chiBaoTabs .nav:before {
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .chiBaoTabs .nav li {
+            position: relative;
+            z-index: 1;
+            border: none;
+        }
+
+            .chiBaoTabs .nav li a {
+                background: #e5e5e5;
+                padding: 5px 15px;
+            }
+
+            .chiBaoTabs .nav li.active a {
+                background: #d11919;
+                color: #fff;
+                border-bottom: solid 2px #d11919;
+            }
+
+                .chiBaoTabs .nav li.active a.fbTab {
+                    background: #4267b2 !important;
+                }
+
+                .chiBaoTabs .nav li.active a.starTab {
+                    background: #ffcf10 !important;
+                    color: #000;
+                }
+
+    .chiBaoTabs .tab-content {
+        background: #f9f9f9;
+        border: solid 1px #f5f5f5;
+    }
+
+#rating {
+    font-size: 1.25em;
+    line-height: 35px;
+    float: left;
+}
+
+.rateCmt .ratingItem {
+    margin-top: 15px;
+}
+
+    .rateCmt .ratingItem .title {
+        font-weight: bold;
+        margin-bottom: 0px;
+    }
+
+        .rateCmt .ratingItem .title .fa {
+            color: #ffcf10;
+        }
+
+    .rateCmt .ratingItem .content {
+        color: #555;
+        font-size: 0.875em;
+    }
+
+.cbInfo {
+    float: right;
+    margin-top: -67px;
+    position: relative;
+    z-index: 1;
+}
+
+    .cbInfo .actions .luotTai {
+        font-size: 0.875em;
+        font-style: italic;
+        margin-right: 10px;
+        line-height: 35px;
+    }
+
+.otherNews {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #e5e5e5;
+    font-size: 0.875em;
+}
+
+    .otherNews .lblOther {
+        display: inline-block;
+        background: #ffc602;
+        color: #000000;
+        text-transform: uppercase;
+        min-width: 150px;
+        line-height: 40px;
+        padding: 0px 25px;
+        margin-bottom: 15px;
+    }
+
+    .otherNews .newsPhoto .photo .des {
+        padding: 15px;
+        text-align: justify;
+    }
+
+.infoNewsDetail {
+    font-weight: lighter;
+    color: #999;
+    font-size: 0.875em;
+    margin-bottom: 15px;
+    margin-top: -15px;
+}
+
+.headTitlePage {
+    margin: 0;
+    padding-bottom: 5px;
+    font-weight: lighter;
+    text-transform: uppercase;
+    font-size: 1.25em;
+    border-bottom: 2px solid #e5e5e5;
+    margin-bottom: 25px;
+    position: relative;
+    width: 100%;
+}
+
+.headTitlePage:before {
+    content: '';
+    width: 100px;
+    border-bottom: solid 2px #ffc602;
+    position: absolute;
+    left: 0px;
+    bottom: -2px;
+}
+
+.thumbScale1 {
+    overflow: hidden;
+}
+
+.thumbScale1:hover {
+    transition: all 0.3s !important; 
+    transform: scale(1) !important; 
+    width: 100%;
+}
+
+#socialLoginForm ul li {
+    display: inline-block;
+    margin: 15px 0;
+}
+
+.sidebar .widget {
+    background-color: #f6f6f6;
+}
+
+.sidebar .widget-title {
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.widget {
+    padding: 20px;
+}
+
+.sidebar .widget-title span {
+    display: inline-block;
+    padding: 0 0 0.5em 0;
+    position: relative;
+}
+
+    .sidebar .widget-title span::before {
+        content: "";
+        position: absolute;
+        width: 60px;
+        bottom: -1px;
+        border-bottom: 1px solid #e54e53;
+    }
+
+.widget-title {
+    font-size: 18px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #333;
+}
+
+input[type="text"], input[type="password"] {
+    margin-bottom: 0 !important;
+}
+
+.sidebar-social {
+    padding-bottom: 20px;
+    padding-top: 38px;
+}
+.btnReadMore {
+    background-color: #fff;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 4px;
+    color: black;
+    border: 2px solid #0a6db7;
+}
+
+    .btnReadMore:hover {
+        background-color: #0a6db7;
+        color: white;
+    }

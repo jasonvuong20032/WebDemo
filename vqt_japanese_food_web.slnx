@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="JapaneseFood.Common/JapaneseFood.Common.csproj" />
+  <Project Path="JapaneseFood.Entity/JapaneseFood.Entity.csproj" />
+  <Project Path="JapaneseFood.Model/JapaneseFood.Model.csproj" />
+  <Project Path="vqt_japanese_food_web/vqt_japanese_food_web.csproj" />
+</Solution>

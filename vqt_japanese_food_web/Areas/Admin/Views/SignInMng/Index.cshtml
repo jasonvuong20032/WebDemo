@@ -1,0 +1,113 @@
+﻿@{
+    Layout = null;
+}
+@model JapaneseFood.Model.User.LoginDto
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/Content/assets/images/favicon.png")">
+    <title>Login</title>
+
+    <!-- page css -->
+    <link href="@Url.Content("~/Content/dist/css/pages/login-register-lock.css")" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="@Url.Content("~/Content/dist/css/style.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/common.css")" rel="stylesheet" />
+</head>
+
+<body class="skin-default card-no-border">
+    <!-- ============================================================== -->
+    <!-- Preloader -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">Elite Admin</p>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- Main Wrapper -->
+    <!-- ============================================================== -->
+    <section id="wrapper">
+        <div class="login-register">
+            <div class="login-box card">
+                <div class="card-body">
+                    @using (Html.BeginForm("Index", "SignInMng", FormMethod.Post,
+                                        new { @id = "form-create", @class = "form-horizontal form-material needs-validation", @enctype = "multipart/form-data" }))
+                    {
+                        <h3 class="text-center m-b-20">Login</h3>
+
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                @Html.TextBoxFor(model => model.UserName,
+                                new { @class = "form-control", required = "", placeholder = "Username", autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.UserName, null,
+                                                        new { @id = "userName", @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                @Html.PasswordFor(model => model.Password,
+                                                            new { @class = "form-control", required = "", placeholder = "Password", autocomplete = "off" })
+                                @Html.ValidationMessageFor(model => model.Password, null,
+                                                            new { @id = "password", @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div class="custom-control custom-checkbox">
+                                        @Html.CheckBoxFor(model => model.RememberMe,
+                                                                            new { @class = "custom-control-input", @id = "customCheck1" })
+                                        <label class="custom-control-label" for="customCheck1">
+                                            Remember me
+                                        </label>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <a href="javascript:void(0)" id="to-recover" class="text-muted">
+                                            <i class="fas fa-lock m-r-5"></i> Forgot password?
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <div class="col-xs-12 p-b-20">
+                                <button class="btn btn-block btn-lg btn-info btn-rounded" type="submit">
+                                    Login
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- Scripts -->
+    <!-- ============================================================== -->
+    <script src="@Url.Content("~/Content/assets/node_modules/jquery/jquery-3.2.1.min.js")"></script>
+    <script src="@Url.Content("~/Content/assets/node_modules/popper/popper.min.js")"></script>
+    <script src="@Url.Content("~/Content/assets/node_modules/bootstrap/dist/js/bootstrap.min.js")"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".preloader").fadeOut();
+        });
+    </script>
+
+</body>
+</html>

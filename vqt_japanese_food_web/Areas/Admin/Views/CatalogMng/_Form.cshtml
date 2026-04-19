@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null;
+}
+@model JapaneseFood.Model.Catalog.CatalogDto
+
+<div class="row form-horizontal form-label-left" style="margin-bottom:15px;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <fieldset style="width: 100%">
+                    <legend>GENERAL INFORMATION</legend>
+
+                    <div class="first-step-group-criteria" style="padding-top:10px; margin-bottom: 10px;">
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="menu-name">Menu Name</label>
+                                @Html.HiddenFor(model => model.Id)
+                                @Html.HiddenFor(model => model.CreatedBy)
+                                @Html.HiddenFor(model => model.CreatedAt)
+
+                                @Html.TextBoxFor(model => model.Name, new
+                                {
+                                    @class = "form-control",
+                                                                placeholder = "Enter catalog name",
+                                                                @autocomplete = "off"
+                                                                })
+                                @Html.ValidationMessageFor(model => model.Name, null,
+                                                                new { @id = "menu-name", @class = "label label-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox mr-sm-2">
+                                        @Html.CheckBoxFor(model => model.IsActive,
+                                                                                new { @class = "icheck custom-control-input", @id = "active" })
+                                        <label class="custom-control-label" for="active">Active</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </fieldset>
+
+                <div class="text-right">
+                    <a href="@Url.Action("Index", "CatalogMng")" class="btn btn-default">Cancel</a>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

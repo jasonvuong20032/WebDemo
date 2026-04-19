@@ -1,0 +1,684 @@
+﻿
+@using Microsoft.AspNetCore.Http
+@model JapaneseFood.Model.Order.OrderDto
+@{
+    Layout = null;
+}
+
+<!DOCTYPE>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" class="flexbox">
+<head>
+    <title>
+        Vuong Quang Tuan - Check out
+    </title>
+    <meta name="description" content="Vuong Quang Tuan - Check out" />
+    <script src="@Url.Content("~/Content/web/jquery.min.1.11.0.js")"></script>
+    <link href="@Url.Content("~/Content/web/checkout.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/web/styles.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/Content/web/plugins.js")"></script>
+    <script src="@Url.Content("~/Content/web/scripts.js")"></script>
+    <script src="@Url.Content("~/Content/web/scripts_main.js")"></script>
+
+    <script type="text/javascript">
+        window.onpageshow = function (event) {
+            if (event.persisted) {
+                var currentUrl = '';
+
+                currentUrl = '/checkouts/ea62e7280dfa4cb1b45227b98a005d1e?step=1';
+
+
+                if (currentUrl)
+                    window.location = currentUrl;
+            }
+        };
+
+
+
+        var isInit = false;
+
+
+        function funcFormOnSubmit(e) {
+            //debugger;
+            if (!isInit) {
+                isInit = true;
+
+                $.fn.tagName = function () {
+                    return this.prop("tagName").toLowerCase();
+                };
+            }
+
+            if (typeof (e) == 'string') {
+                var element = $(e);
+                var formData = e;
+            } else {
+                var element = this;
+                var formData = this;
+                e.preventDefault();
+            }
+
+            $(element).find('button:submit').addClass('btn-loading');
+
+            var formId = $(element).attr('id'), replaceElement = [], funcCallback;
+
+            if (formId == undefined || formId == null || formId == '')
+                return;
+            var _orderParam = new Object();
+            var hasError = false;
+            try {
+                var cusName = $('body').find('input[name$="billing_full_name"]');
+                var cusEmail = $('body').find('input[name$="billing_email"]');
+                var cusPhone = $('body').find('input[name$="billing_phone"]');
+                var cusAddress = $('body').find('input[name$="billing_address"]');
+                var cusDescription = $('body').find('textarea[name$="billing_description"]');
+                if (cusName.val() == "") {
+                    cusName.parents("div.field-required").addClass("field-error");
+                    hasError = true;
+                }
+                if (cusPhone.val() == "") {
+                    cusPhone.parents("div.field-required").addClass("field-error");
+                    hasError = true;
+                }
+                if (cusAddress.val() == "") {
+                    cusAddress.parents("div.field-required").addClass("field-error");
+                    hasError = true;
+                }
+                if (!hasError) {
+                    _orderParam.CustomerName = cusName.val();
+                    _orderParam.Phone = cusPhone.val();
+                    _orderParam.Address = cusAddress.val();
+                    _orderParam.Email = cusEmail.val();
+                    _orderParam.Description = cusDescription.val();
+                    var listPro = [];
+                    var dataProduct = vuongQuangTuan.getListOrder();
+                    if (dataProduct != null && dataProduct != undefined) {
+                        $.each(dataProduct, function (index, value) {
+                            var _productList = new Object();
+                            _productList.ProductId = value.Id;
+                            _productList.Color = value.ColorCode;
+                            _productList.ColorName = value.ColorName;
+                            _productList.ProductCode = value.Code;
+                            _productList.ProductName = value.Name;
+                            _productList.ImageURL = value.ImageURL;
+                            _productList.Price = value.Price;
+                            _productList.Qty = value.Qty;
+                            _productList.Size = value.Size;
+                            listPro.push(_productList);
+                        });
+                    }
+                    _orderParam.OrderDetails = listPro;
+                }
+            } catch (err) {
+
+                hasError = true
+
+            }
+            if (!hasError) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CheckOut", "Carts")',
+                    data: _orderParam,
+                    success: function (data) {
+                        if (data.Failure == false) {
+                            vuongQuangTuan.detroyOder();
+                            LoadProductData([]);
+                            swal({
+                                title: "Bạn đã đặt hàng thành công.",
+                                type: 'success',
+                                html:
+                                    'Quay về <a href="/">Trang chủ</a>.',
+                                showConfirmButton: false,
+                            });
+                        } else {
+                            swal({
+                                title: data.Error,
+                                type: 'error'
+                            });
+                        }
+                        $(element).find('button:submit').removeClass('btn-loading');
+                    }
+                }).error(function (data) {
+                    $(element).find('button:submit').removeClass('btn-loading');
+                });
+            } else {
+                $(element).find('button:submit').removeClass('btn-loading');
+            }
+
+
+            return false;
+        };
+        function funcSetEvent() {
+            var effectControlFieldClass = '.field input, .field select, .field textarea';
+
+            $('body')
+                .on('focus', effectControlFieldClass, function () {
+                    funcFieldFocus($(this), true);
+                })
+                .on('blur', effectControlFieldClass, function () {
+                    funcFieldFocus($(this), false);
+                    funcFieldHasValue($(this), true);
+                })
+                .on('keyup input paste', effectControlFieldClass, function () {
+                    funcFieldHasValue($(this), false);
+                })
+                .on('submit', 'form', funcFormOnSubmit);
+
+
+        };
+        function funcFieldFocus(fieldInputElement, isFocus) {
+            if (fieldInputElement == undefined)
+                return;
+
+            var fieldElement = $(fieldInputElement).closest('.field');
+
+            if (fieldElement == undefined)
+                return;
+
+            if (isFocus)
+                $(fieldElement).addClass('field-active');
+            else
+                $(fieldElement).removeClass('field-active');
+        };
+        function funcFieldHasValue(fieldInputElement, isCheckRemove) {
+            if (fieldInputElement == undefined)
+                return;
+
+            var fieldElement = $(fieldInputElement).closest('.field');
+
+            if (fieldElement == undefined)
+                return;
+
+            if ($(fieldElement).find('.field-input-wrapper-select').length > 0) {
+                var value = $(fieldInputElement).find(':selected').val();
+
+                if (value == 'null')
+                    value = undefined;
+            } else {
+                var value = $(fieldInputElement).val();
+            }
+
+            if (!isCheckRemove) {
+                if (value != $(fieldInputElement).attr('value'))
+                    $(fieldElement).removeClass('field-error');
+            }
+
+            var fieldInputBtnWrapperElement = $(fieldInputElement).closest('.field-input-btn-wrapper');
+
+            if (value && value.trim() != '') {
+                $(fieldElement).addClass('field-show-floating-label');
+                $(fieldInputBtnWrapperElement).find('button:submit').removeClass('btn-disabled');
+            }
+            else if (isCheckRemove) {
+                $(fieldElement).removeClass('field-show-floating-label');
+                $(fieldInputBtnWrapperElement).find('button:submit').addClass('btn-disabled');
+            }
+            else {
+                $(fieldInputBtnWrapperElement).find('button:submit').addClass('btn-disabled');
+            }
+        };
+        function funcInit() {
+            funcSetEvent();
+
+
+        }
+
+        function funcReplaceMembershipInfo(html, replaceElement) {
+            var tempElement = $(replaceElement);
+            var newElement = $(html).find(replaceElement);
+            tempElement.html(newElement.html());
+        }
+
+        function funcMembershipInfo() {
+
+        }
+        $(document).ready(function () {
+
+            funcInit();
+            funcMembershipInfo();
+
+        });
+
+    </script>
+    <script type="text/javascript">
+        var toggleShowOrderSummary = false;
+        $(document).ready(function () {
+            var currentUrl = '';
+
+
+            currentUrl = '/checkouts/ea62e7280dfa4cb1b45227b98a005d1e?step=1';
+
+
+            if ($('#reloadValue').val().length == 0) {
+                $('#reloadValue').val(currentUrl);
+                $('body').show();
+            }
+            else {
+                window.location = $('#reloadValue').val();
+                $('#reloadValue').val('');
+            }
+
+            $('body')
+                .on('click', '.order-summary-toggle', function () {
+                    toggleShowOrderSummary = !toggleShowOrderSummary;
+
+                    if (toggleShowOrderSummary) {
+                        $('.order-summary-toggle')
+                            .removeClass('order-summary-toggle-hide')
+                            .addClass('order-summary-toggle-show');
+
+                        $('.sidebar:not(".sidebar-second") .sidebar-content .order-summary')
+                            .removeClass('order-summary-is-collapsed')
+                            .addClass('order-summary-is-expanded');
+
+                        $('.sidebar.sidebar-second .sidebar-content .order-summary')
+                            .removeClass('order-summary-is-expanded')
+                            .addClass('order-summary-is-collapsed');
+                    } else {
+                        $('.order-summary-toggle')
+                            .removeClass('order-summary-toggle-show')
+                            .addClass('order-summary-toggle-hide');
+
+                        $('.sidebar:not(".sidebar-second") .sidebar-content .order-summary')
+                            .removeClass('order-summary-is-expanded')
+                            .addClass('order-summary-is-collapsed');
+
+                        $('.sidebar.sidebar-second .sidebar-content .order-summary')
+                            .removeClass('order-summary-is-collapsed')
+                            .addClass('order-summary-is-expanded');
+                    }
+                });
+        });
+    </script>
+    <style>
+        .imageVariantCart, .quantityVariantCart, .totalLinePriceVariantCart {
+            width: 22% !important;
+        }
+
+        .sidebar .sidebar-content .order-summary .order-summary-sections .order-summary-section {
+            /*border-top: 1px solid;*/
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+            /*border-color: #e1e1e1;*/
+        }
+
+        table.product-table td {
+            border: none !important;
+        }
+
+        table.total-line-table td {
+            border: none !important;
+        }
+
+        .summary-subtotal {
+            font-size: 14px;
+            border-bottom: none !important;
+            border-top: 1px solid #e1e1e1;
+        }
+    </style>
+</head>
+<body>
+    <input id="reloadValue" type="hidden" name="reloadValue" value="" />
+    <input id="is_vietnam" type="hidden" value="true" />
+    <input id="is_vietnam_location" type="hidden" value="true" />
+    <div class="banner">
+        <div class="wrap">
+            <a href="@Url.Action(" CheckOut", "Carts")" class="logo">
+                <h1 class="logo-text">Vuong Quang Tuan</h1>
+            </a>
+        </div>
+    </div>
+    <button class="order-summary-toggle order-summary-toggle-hide">
+        <div class="wrap">
+            <div class="order-summary-toggle-inner">
+                <div class="order-summary-toggle-icon-wrapper">
+                    <svg width="20" height="19" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle-icon">
+                        <path d="M17.178 13.088H5.453c-.454 0-.91-.364-.91-.818L3.727 1.818H0V0h4.544c.455 0 .91.364.91.818l.09 1.272h13.45c.274 0 .547.09.73.364.18.182.27.454.18.727l-1.817 9.18c-.09.455-.455.728-.91.728zM6.27 11.27h10.09l1.454-7.362H5.634l.637 7.362zm.092 7.715c1.004 0 1.818-.813 1.818-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817zm9.18 0c1.004 0 1.817-.813 1.817-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817z"></path>
+                    </svg>
+                </div>
+                <div class="order-summary-toggle-text order-summary-toggle-text-show">
+                    <span>Show order details</span>
+                    <svg width="11" height="6" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle-dropdown" fill="#000">
+                        <path d="M.504 1.813l4.358 3.845.496.438.496-.438 4.642-4.096L9.504.438 4.862 4.534h.992L1.496.69.504 1.812z"></path>
+                    </svg>
+                </div>
+                <div class="order-summary-toggle-text order-summary-toggle-text-hide">
+                    <span>Hide order details</span>
+                    <svg width="11" height="7" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle-dropdown" fill="#000">
+                        <path d="M6.138.876L5.642.438l-.496.438L.504 4.972l.992 1.124L6.138 2l-.496.436 3.862 3.408.992-1.122L6.138.876z"></path>
+                    </svg>
+                </div>
+                <div class="order-summary-toggle-total-recap" data-checkout-payment-due-target="0">
+                    <span class="total-recap-final-price">0₫</span>
+                </div>
+            </div>
+        </div>
+    </button>
+
+    <div class="content content-second">
+        <div class="wrap">
+            <div class="sidebar sidebar-second">
+                <div class="sidebar-content">
+                    <div class="order-summary">
+                        <div class="order-summary-sections">
+                            <div class="order-summary-section order-summary-section-discount" data-order-summary-section="discount">
+                                @*<form id="form_discount_add" accept-charset="UTF-8" method="post">
+                                <input name="utf8" type="hidden" value="✓">
+                                <div class="fieldset">
+                                    <div class="field">
+                                        <div class="field-input-btn-wrapper">
+                                            <div class="field-input-wrapper">
+                                                <label class="field-label" for="discount.code">Discount code</label>
+                                                <input placeholder="Discount code" class="field-input" data-discount-field="true" autocomplete="off" autocapitalize="off" spellcheck="false" size="30" type="text" id="discount.code" name="discount.code" value="" />
+                                            </div>
+                                            <button type="submit" class="field-input-btn btn btn-default btn-disabled">
+                                                <span class="btn-content">Apply</span>
+                                                <i class="btn-spinner icon icon-button-spinner"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="wrap">
+            <div class="sidebar">
+                <div class="sidebar-content">
+                    <div class="order-summary order-summary-is-collapsed">
+                        <h2 class="visually-hidden">Order Information</h2>
+                        <div class="order-summary-sections">
+                            <div class="order-summary-section order-summary-section-product-list" data-order-summary-section="line-items">
+                                <table class="product-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"><span class="visually-hidden">Image</span></th>
+                                            <th scope="col"><span class="visually-hidden">Description</span></th>
+                                            <th scope="col"><span class="visually-hidden">Quantity</span></th>
+                                            <th scope="col"><span class="visually-hidden">Price</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list-item-checkout">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="span12 expanded-message text-center hidden">
+                                Your cart is empty
+                            </div>
+                            <div class="order-summary-section order-summary-section-total-lines payment-lines" data-order-summary-section="payment-lines" style="padding-bottom: 0px !important; border-top: none !important;">
+                                <table class="total-line-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"><span class="visually-hidden">Description</span></th>
+                                            <th scope="col"><span class="visually-hidden">Price</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="summary-subtotal clearfix">
+                                        <tr class="total-line total-line-subtotal">
+                                            <td class="total-line-name">Subtotal</td>
+                                            <td class="total-line-price">
+                                                <span class="valOrder total_price noBold"><b>0₫</b></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="total-line total-line-shipping">
+                                            <td class="total-line-name">Shipping</td>
+                                            <td class="total-line-price">
+                                                <span class="order-summary-emphasis" data-checkout-total-shipping-target="0">
+                                                    0đ
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="total-line-table-footer">
+                                        <tr class="total-line">
+                                            <td class="total-line-name payment-due-label">
+                                                <span class="payment-due-label-total">Total</span>
+                                            </td>
+                                            <td class="total-line-name payment-due">
+                                                <span class="payment-due-currency">VND</span>
+                                                <span class="payment-due-price" data-checkout-payment-due-target="0">
+                                                    0₫
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main">
+                <div class="main-header" style="padding-bottom: 0px !important;">
+                    <a href="/" class="logo">
+                        <h1 class="logo-text">Vuong Quang Tuan</h1>
+                    </a>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("Index", "Carts")">Cart</a>
+                        </li>
+                        <li class="breadcrumb-item breadcrumb-item-current">
+                            Shipping Information
+                        </li>
+                    </ul>
+                </div>
+                <div class="main-content">
+                    <div class="step">
+                        <div class="step-sections steps-onepage" step="1">                           
+                            <div class="section">
+                                <div class="section-header">
+                                    <h2 class="section-title">Shipping Information</h2>
+                                </div>
+                                <div class="section-content section-customer-information no-mb">
+                                    <div class="fieldset">
+
+                                        <!-- Full Name -->
+                                        <div class="field field-required">
+                                            <div class="field-input-wrapper">
+                                                <label class="field-label" for="FullName">Full Name</label>
+                                                <input placeholder="Full Name"
+                                                       autocapitalize="off"
+                                                       spellcheck="false"
+                                                       class="field-input"
+                                                       size="30"
+                                                       type="text"
+                                                       id="FullName"
+                                                       name="FullName"
+                                                       value="@Model?.FullName" />
+                                            </div>
+                                            <p class="field-message field-message-error">Please enter your full name</p>
+                                        </div>
+
+                                        <!-- Phone -->
+                                        <div class="field field-required">
+                                            <div class="field-input-wrapper">
+                                                <label class="field-label" for="Phone">Phone Number</label>
+                                                <input placeholder="Phone Number"
+                                                       autocapitalize="off"
+                                                       spellcheck="false"
+                                                       class="field-input"
+                                                       size="30"
+                                                       maxlength="11"
+                                                       type="tel"
+                                                       id="Phone"
+                                                       name="Phone"
+                                                       value="@Model?.Phone" />
+                                            </div>
+                                            <p class="field-message field-message-error">Phone number is required</p>
+                                        </div>
+
+                                        <!-- Address -->
+                                        <div class="field field-required">
+                                            <div class="field-input-wrapper">
+                                                <label class="field-label" for="Address">Address</label>
+                                                <input placeholder="Address"
+                                                       autocapitalize="off"
+                                                       spellcheck="false"
+                                                       class="field-input"
+                                                       size="30"
+                                                       type="text"
+                                                       id="Address"
+                                                       name="Address"
+                                                       value="@Model?.Address" />
+                                            </div>
+                                            <p class="field-message field-message-error">Address is required</p>
+                                        </div>
+
+                                        <!-- UserName (read-only) -->
+                                        <div class="field">
+                                            <div class="field-input-wrapper">
+                                                <label class="field-label" for="UserName">User Name</label>
+                                                <input placeholder="User Name"
+                                                       class="field-input"
+                                                       size="30"
+                                                       type="text"
+                                                       id="UserName"
+                                                       name="UserName"
+                                                       value="@Model?.UserName"
+                                                       readonly />
+                                            </div>
+                                        </div>
+
+                                        <!-- UserId (hidden) -->
+                                        <input type="hidden" name="UserId" value="@Model?.Id" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="notice" style="color:#f77705;font-style:italic;margin: 1.5em auto 0.3em 5px;">Please fill in your full address to receive your order faster!</h3>
+                        <div class="step-footer">
+                            <form id="form_next_step" accept-charset="UTF-8" method="post">
+                                <input name="utf8" type="hidden" value="✓">
+                                <button type="submit" class="step-footer-continue-btn btn">
+                                    <span class="btn-content">Complete Order</span>
+                                    <i class="btn-spinner icon icon-button-spinner"></i>
+                                </button>
+                            </form>
+                            <a class="step-footer-previous-link" href="@Url.Action("Index", "Cart")">
+                                <svg class="previous-link-icon icon-chevron icon" xmlns="http://www.w3.org/2000/svg" width="6.7" height="11.3" viewBox="0 0 6.7 11.3">
+                                    <path d="M6.7 1.1l-1-1.1-4.6 4.6-1.1 1.1 1.1 1 4.6 4.6 1-1-4.6-4.6z"></path>
+                                </svg>
+                                Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        var dataProduct = vuongQuangTuan.getListOrder();
+        if (dataProduct != null && dataProduct != undefined) {
+            LoadProductData(dataProduct);
+        }
+    })
+
+    function LoadProductData(dataProduct) {
+        var htmlTemplate = "";
+        $.each(dataProduct, function (index, value) {
+            htmlTemplate += '<tr class="product" data-product-id="' + value.Id + '">'
+                + ' <td class="product-image">'
+                + '     <div class="product-thumbnail">'
+                + '         <div class="product-thumbnail-wrapper">'
+                + '             <img class="product-thumbnail-image" alt="' + value.Name + '" src="' + value.ImageURL + '">'
+                + '         </div>'
+                + '         <span class="product-thumbnail-quantity" aria-hidden="true">' + value.Qty + '</span>'
+                + '     </div>'
+                + ' </td>'
+                + ' <td class="product-description">'
+                + '     <span class="product-description-name order-summary-emphasis">' + value.Name + '</span>'
+                + '     <span class="product-description-variant order-summary-small-text">' + value.Size + (value.Size == "" ? "" : ' / ') + value.ColorName + '</span>'
+                + ' </td>'
+                + ' <td class="product-quantity visually-hidden">' + value.Qty + '</td>'
+                + ' <td class="product-price">'
+                + '     <span class="order-summary-emphasis">' + NumberFormat((value.Price * value.Qty)) + '₫</span>'
+                + ' </td>'
+                + '</tr>';
+        })
+        $(".product-table tbody.list-item-checkout").html(htmlTemplate);
+        UpdateTotalCount(dataProduct);
+    }
+    function UpdateTotalCount(dataProduct) {
+        var totalQuantity = 0;
+        var totalPrice = 0;
+        if (dataProduct != null && dataProduct != undefined) {
+            $.each(dataProduct, function (index, value) {
+                totalQuantity += value.Qty;
+                totalPrice += (value.Qty * value.Price)
+            })
+        }
+        $(".summary-subtotal .total_price b").text(NumberFormat(totalPrice) + "₫")
+        $(".total-recap-final-price").text(NumberFormat(totalPrice) + "₫");
+        $(".total-line-table-footer .payment-due-price").text(NumberFormat(totalPrice) + "₫");
+    }
+
+    $(".step-footer-continue-btn").click(function (e) {
+        e.preventDefault();
+
+        var $btn = $(this);
+        $btn.prop("disabled", true);
+        $btn.find(".btn-spinner").show(); 
+
+        var data = {
+            FullName: $("#FullName").val(),
+            Phone: $("#Phone").val(),
+            Address: $("#Address").val(),
+            UserName: $("#UserName").val(),
+            UserId: $("input[name='UserId']").val()
+        };
+
+        var products = vuongQuangTuan.getListOrder(); // [{ProductId, Quantity}, ...]
+        if (products && products.length > 0) {
+            data.OrderDetails = products.map(function(p) {
+                return {
+                    ProductId: p.Id,
+                    ProductName: p.Name,
+                    Quantity: p.Qty,
+                    Price: p.Price
+                };
+            });
+        }
+
+        var token = $("input[name='__RequestVerificationToken']").val();
+        if (token) {
+            data.__RequestVerificationToken = token;
+        }
+
+        // AJAX POST
+        $.ajax({
+            url: "/Cart/CheckOut",
+            type: "POST",
+            data: data,
+            success: function(res) {
+                if (res.success) {
+                    vuongQuangTuan.deleteOrder();
+                    alert(res.message || "Order completed successfully!");
+                    window.location.href = "/Home/Index";
+                } else {
+                    alert(res.message || "Order failed!");
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("Submit failed: " + error);
+            },
+            complete: function() {
+                $btn.prop("disabled", false);
+                $btn.find(".btn-spinner").hide();
+            }
+        });
+    });
+    
+</script>
+<script src="@Url.Content("~/Content/web/plugins.js")"></script>

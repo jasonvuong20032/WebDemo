@@ -1,0 +1,68 @@
+﻿@{
+    Layout = null;
+}
+@model JapaneseFood.Model.Category.CategoryDto
+
+<div class="row form-horizontal form-label-left" style="margin-bottom:15px;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <fieldset style="width: 100%">
+                    <legend>GENERAL INFORMATION</legend>
+
+                    <div class="first-step-group-criteria" style="padding-top:10px; margin-bottom: 10px;">
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="Name">Category Name</label>
+
+                                @Html.HiddenFor(model => model.Id)
+                                @Html.HiddenFor(model => model.CreatedBy)
+                                @Html.HiddenFor(model => model.CreatedAt)
+
+                                @Html.TextBoxFor(model => model.Name, new
+                                {
+                                    @class = "form-control",
+                                                                placeholder = "Enter category name"
+                                                                })
+                                @Html.ValidationMessageFor(model => model.Name, null,
+                                                                new { @class = "label label-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="CatalogId">Select Menu</label>
+
+                                @Html.DropDownListFor(
+                                                                model => model.CatalogId,
+                                                                new SelectList(Model.Catalogs, "Value", "Text", Model.CatalogId),
+                                                                null,
+                                                                new
+                                                                {
+                                                                    @class = "form-control cc-select2 custom-select",
+                                                                    @style = "width:100%;"
+                                                                })
+
+                                @Html.ValidationMessageFor(model => model.CatalogId, null,
+                                                                new { @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row form-group">
+                            <div class="col-md-6 mb-3">
+                                <div class="custom-control custom-checkbox mr-sm-2">
+                                    @Html.CheckBoxFor(model => model.IsActive,
+                                                                        new { @class = "icheck custom-control-input", @id = "active" })
+                                    <label class="custom-control-label" for="active">Active</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <a href="@Url.Action("Index", "CategoryMng")" class="btn btn-default">Cancel</a>
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,145 @@
+﻿@{
+    Layout = null;
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+@model JapaneseFood.Model.Order.OrderDto
+@using JapaneseFood.Common.Enums;
+@using JapaneseFood.Common;
+
+<div class="row form-horizontal form-label-left" style="margin-bottom:15px;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <!-- ORDER INFORMATION -->
+                <fieldset style="width: 100%">
+                    <legend>
+                        ORDER INFORMATION
+                        <span style="color: red;">
+                            <strong>@Model.CreatedAt.ToString("dd-MM-yyyy HH:mm")</strong>
+                        </span>
+                    </legend>
+
+                    <div class="first-step-group-criteria" style="padding-top:10px; margin-bottom: 10px;">
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>Customer Name</label>
+                                @Html.HiddenFor(model => model.Id)
+                                @Html.HiddenFor(model => model.CreatedBy)
+                                @Html.HiddenFor(model => model.CreatedAt)
+                                @Html.TextBoxFor(model => model.FullName,
+                                                                new { @readonly = true, @class = "form-control", placeholder = "Customer name" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Phone Number</label>
+                                @Html.TextBoxFor(model => model.Phone,
+                                                                new { @readonly = true, @class = "form-control", placeholder = "Phone number" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>Email</label>
+                                @Html.TextBoxFor(model => model.UserName,
+                                    new { @readonly = true, @class = "form-control", placeholder = "Email" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Address</label>
+                                @Html.TextBoxFor(model => model.Address,
+                                    new { @readonly = true, @class = "form-control", placeholder = "Address" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>Order Code</label>
+                                @Html.TextBoxFor(model => model.Code,
+                                    new { @readonly = true, @class = "form-control", placeholder = "Order code" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Order Status</label>
+                                @Html.TextBox(
+                                    "Status",
+                                    ExtensionClass.GetEnumDescription((EnumCommons.OrderStatus)Model.Status),
+                                    new { @readonly = true, @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>Total Price</label>
+                                @Html.TextBox(
+                                    "Price",
+                                    String.Format(info, "{0:c0}", Model.SubTotal),
+                                    new { @readonly = true, @class = "form-control" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Quantity</label>
+                                @Html.TextBoxFor(model => model.Quantity,
+                                    new { @readonly = true, @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label>Note</label>
+                                @Html.TextAreaFor(model => model.Note,
+                                    new { @readonly = true, @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- ORDER DETAIL INFORMATION -->
+                <fieldset style="width:100%">
+                    <legend>ORDER DETAIL INFORMATION</legend>
+
+                    <div class="inbox-center table-responsive">
+                        <table class="table table-hover no-wrap">
+                            <thead>
+                                <tr>
+                                    <th>Product Code</th>
+                                    <th>Product Name</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Product Image</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.OrderDetails != null && Model.OrderDetails.Any())
+                                {
+                                    foreach (var item in Model.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td>@item.ProductCode</td>
+                                            <td>@item.ProductName</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@String.Format(info, "{0:c0}", item.Price)</td>
+                                            <td>
+                                                <img height="100" width="100"
+                                                     src="@Url.Content(item.ImageURL)"
+                                                     alt="@item.ProductName"
+                                                     title="@item.ProductName" />
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+
+                <div class="text-right">
+                    <a href="@Url.Action("Index", "OrderMng")" class="btn btn-default">Cancel</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

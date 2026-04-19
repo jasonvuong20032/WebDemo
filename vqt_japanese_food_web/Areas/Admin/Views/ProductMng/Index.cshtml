@@ -1,0 +1,72 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@model List<JapaneseFood.Model.Product.ProductDto>
+<div class="account-management">
+    @await Html.PartialAsync("_breadcrumb", new Dictionary<string, string> { { "A", "Home" }, { "B", "Product Management" } }, new ViewDataDictionary(ViewData) { { "mHref", Url.Action("New", "ProductMng", new { area = "Admin" }) }, { "mShowButton", "true" } })
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive m-t-40">
+                        <table id="config-table" class="table display table-bordered table-striped no-wrap">
+                            <thead>
+                                <tr>
+                                    <th>.No</th>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th style="width: 13%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    int index = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@index</td>
+                                            <td>@item.Code</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.CategoryName</td>
+                                            <td>
+                                                @if (item.IsActive)
+                                                {
+                                                    <label class="btn btn-default btn-sm"><i class="fa fa-lg fa-toggle-on text-success"></i></label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="btn btn-default btn-sm"><i class="fa fa-lg fa-toggle-off text-danger"></i></label>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-3 pull-right">
+                                                    <a href="@Url.Action("Edit","ProductMng", new { Id = item.Id })" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update">
+                                                        <i class="fas fa-fw fa-pencil-alt text-success"></i>
+                                                    </a>
+                                                    <a href="@Url.Action("Destroy", "ProductMng", new { Id = item.Id })" class="btn btn-default btn-sm" data-confirm="Do you want delete ?" data-toggle="tooltip" data-placement="bottom" title="Delete">
+                                                        <i class="fa fa-fw fa-trash text-danger"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        index++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#config-table').DataTable({
+        responsive: true
+    });
+</script>

@@ -1,0 +1,267 @@
+﻿@{
+    Layout = null;
+}
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+@model JapaneseFood.Model.Product.ProductDto
+
+<div>
+    <button type="button" class="close" data-dismiss="modal">
+        <img src="//file.hstatic.net/1000360430/file/iconclose_32c1d6a3da3545278283605bbfca0b0b.png" alt="Close">
+    </button>
+
+    <div class="col-md-8 col-sm-7 col-xs-12">
+        <div class="clearfix hidden-xs col-sm-1 thumbnails small-img">
+            <div class="row">
+                @if (Model.Images != null && Model.Images.Any())
+                {
+                    int index = 0;
+                    foreach (var item in Model.Images)
+                    {
+                        var _class = index == 0 ? "active" : "class";
+                        <div class="thumb @_class" style="margin-bottom:7px;">
+                            <img src="@Url.Content(item.ImageUrl)" />
+                        </div>
+                        index++;
+                    }
+                }                
+            </div>
+        </div>
+        <div class="clearfix col-sm-11">
+            <div id="slide-image" class="owl-carousel owl-loaded owl-theme"></div>
+            @if (Model.Images != null && Model.Images.Any())
+            {
+                int index = 0;
+                foreach (var item in Model.Images)
+                {
+                    var display = index == 0 ? "block" : "none";
+                    <div class="hinh360" style="display:@display">
+                        <div id="mySpriteSpin"><img src="@Url.Content(item.ImageUrl)" /></div>
+                    </div>
+                    index++;
+                }
+            }            
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-5 col-xs-12" id="detail-product">
+        <div class="product-title">
+            <h1><span id="productName">@Model.Name</span> (<span id="productCode">@Model.Code</span>)</h1>
+            <span class="pro-soldold">
+                Status: 
+                @if (Model.IsAvailable)
+                {
+                    <span class="statusProduct">In stock</span>
+                }
+                else
+                {
+                    <span class="statusProduct">Out of stock</span>
+                }
+            </span>
+        </div>
+
+        <div class="product-price" id="price-preview" data-price-min="@Model.Price">
+            @if (Model.IsOnSale)
+            {
+                bool hasSale =
+                Model.IsOnSale &&
+                Model.SalePrice.HasValue &&
+                Model.SalePrice < Model.Price;
+
+                int discountPercent = hasSale
+                ? (int)Math.Round(
+                (Model.Price - (Model.SalePrice ?? 0))
+                / Model.Price * 100
+                )
+                : 0;
+                <p class="pro-price-old" style="text-decoration: line-through; color: red;">
+                    @String.Format(info, "{0:c0}", Model.Price)
+                </p>
+                <p class="pro-price highlight">
+                    @String.Format(info, "{0:c0}", Model.SalePrice) - <span class="label-sale">(@discountPercent%)</span>
+                </p>
+            }
+            else
+            {
+                <p class="pro-price highlight">
+                    @String.Format(info, "{0:c0}", Model.Price)
+                </p>
+            }
+            <span class="pro-price">@String.Format(info, "{0:c0}", Model.Price)</span>
+        </div>
+
+        <form id="add-item-form-quickview" action="" method="post" class="variants clearfix">
+            <div class="selector-actions">
+                <div class="quantity-area clearfix">
+                    <input type="button" value="-" onclick="minusQuantity()" class="qty-btn">
+                    <input type="text" id="quantity" name="quantity" value="1" min="1" class="quantity-selector">
+                    <input type="button" value="+" onclick="plusQuantity()" class="qty-btn">
+                </div>
+
+                <div class="wrap-addcart clearfix">
+                    <button type="button"
+                            id="add-to-cart"
+                            data-id="@Model.Id"
+                            class="checkLimitCart add-to-cartProduct btn-addtocart addtocart-modal"
+                            name="add">
+                        Add to cart
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="product-description">
+            <div class="title-bl">
+                <h2>
+                    Product Specifications
+                    <span class="icon-open"></span>
+                </h2>
+            </div>
+            <div class="description-content">
+                <div class="main_details">
+                    <ul>
+                        <li>
+                            <span class="infobe">Product Code:</span>
+                            <span class="infoaf" id="productCode">@Model.Code</span>
+                        </li>
+                        <li>
+                            <span class="infobe">Material:</span>
+                            <span class="infoaf">@Model.Quantity</span>
+                        </li>
+                        <li>
+                            <span class="infobe">Short Description:</span>
+                            <span class="infoaf">@Model.ShortDescription</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-description">
+            <div class="title-bl">
+                <h2>
+                    Product Description
+                    <span class="icon-open"></span>
+                </h2>
+            </div>
+            <div class="description-content">
+                <div class="description-productdetail">
+                    @Html.Raw(@Model.Description)
+                </div>
+            </div>
+        </div>
+@* 
+        <center class="centerDetial">
+            <a href="@Url.Action("Detail", "Product", new { q = Model.Id })">
+                View product details &gt;&gt;
+            </a>
+        </center> *@
+    </div>
+
+    <div id="divzoom">
+        @if (Model.Images != null && Model.Images.Any())
+        {
+            <div class="divzoom_main">
+                @foreach (var image in Model.Images)
+                {
+                    <div class="product-thumb text-center">
+                        <img class="product-image-feature"
+                             src="@Url.Content(image.ImageUrl)"
+                             alt="@Model.Name">
+                    </div>
+                }
+            </div>
+        }
+
+        <div id="positionButtonDiv" class="hidden">
+            <p>
+                <span>
+                    <button type="button" class="buttonZoomIn"><i></i></button>
+                    <button type="button" class="buttonZoomOut"><i></i></button>
+                </span>
+            </p>
+        </div>
+
+        <button id="closedivZoom"><i></i></button>
+    </div>
+
+    <div class="hidden images">
+        @if (Model.Images != null && Model.Images.Any())
+        {
+            foreach (var image in Model.Images)
+            {
+                <div name-new="@Model.Code"
+                     class="item itemdelete"
+                     data-original="@Url.Content(image.ImageUrl)"
+                     data-variant="@Model.Code">
+                    <a href="@Url.Content(image.ImageUrl)"
+                       title="Click to view"
+                       data-image="@Url.Content(image.ImageUrl)"
+                       data-zoom-image="@Url.Content(image.ImageUrl)"
+                       rel="lightbox">
+                        <img class="removeImgMobile hidden-xs img-fluid img-responsive"
+                             src="@Url.Content(image.ImageUrl)">
+                        <img class="removeImgDesktop visible-xs img-fluid img-responsive"
+                             src="@Url.Content(image.ImageUrl)">
+                        <p class="click-p">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            Click to view larger image
+                        </p>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    $('.thumbnails img').on('click', function () {
+
+       var idx = $(this).parent().index(); // index của thumbnail
+
+        // ẩn tất cả hinh360
+        $('.hinh360').hide();
+
+        // hiện ảnh tương ứng
+        $('.hinh360').eq(idx).show();
+
+        // active thumbnail
+        $('.thumbnails .thumb').removeClass('active');
+        $(this).parent().addClass('active');
+    });
+
+     $('.title-bl h2').on('click', function() {
+        // Lấy nội dung description-content tương ứng với h2 này
+        var $content = $(this).closest('.product-description').find('.description-content');
+
+        // toggle hiển thị nội dung
+        $content.slideToggle(300);
+
+        // đổi icon nếu muốn (thêm class open/close)
+        $(this).find('.icon-open').toggleClass('open');
+    });
+
+    $('#quickview-cart #add-to-cart').click(function (e) {
+        e.preventDefault();
+        $(this).addClass('clicked_buy');
+        var ProductId = $(this).attr('data-id')
+        var ProductPrice = $("#quickview-cart #price-preview").attr("data-price-min");
+        var Qty = $('#quantity').val();
+        var ProductName = $('#productName').text()
+        var ProductCode = $('#productCode').text()
+        var ImageURL = $('.images .item').attr('data-original')
+
+        var Item = {
+            Id: ProductId,
+            Price: ProductPrice,
+            Code: ProductCode,
+            Name: ProductName,
+            Qty: Qty,
+            ImageURL: ImageURL,
+            LinkURL: '#'
+        }
+        vuongQuangTuan.addToCard(Item)
+        $("#site-cart-handle").click();
+    });
+</script>

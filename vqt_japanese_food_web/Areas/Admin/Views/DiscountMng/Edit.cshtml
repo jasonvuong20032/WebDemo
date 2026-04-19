@@ -1,0 +1,12 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@model JapaneseFood.Model.Discount.DiscountDto
+<div class="menu-management">
+    @await Html.PartialAsync("_breadcrumb", new Dictionary<string, string> { { "A", "Home" }, { "B", "Discount Management" }, { "C", "Update catalog" } }, new ViewDataDictionary(ViewData) { { "mHref", Url.Action("Index", "DiscountMng", new { area = "Admin" }) }, { "mShowButton", "false" } })
+
+    @using (Html.BeginForm("Edit", "DiscountMng", FormMethod.Post, new { @id = "form-create", @class = "form-horizontal needs-validation", @enctype = "multipart/form-data" }))
+    {
+        @await Html.PartialAsync("_Form", Model)
+    }
+</div>

@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+
+<div class="breadcrumb-shop">
+    <div class="padding-lf-40 clearfix">
+        <div class=" ">
+            <ol class="breadcrumb breadcrumb-arrows clearfix">
+                <li><a href="/" target="_self"><i class="fa fa-home"></i> Home</a></li>
+                <li class="active"><span>Register</span></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="pd-page">
+        <div class="container">
+            <div class="heading-pageNew">
+                <div class="header-pageCart">
+                    <span class="count-cart">Please fill in the form to register</span>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-xs-12 col-sm-6">
+                    <form id="registerForm" method="post">
+                        <div class="cart-container">
+                            <div class="main-content-cart">
+                                <table class="table-cart" style="margin-bottom: 0px !important;">
+                                    <tbody>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="UserName">Username</label>
+                                                <input type="text" id="UserName" name="UserName" class="form-control" placeholder="Enter username" required />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="Password">Password</label>
+                                                <input type="password" id="Password" name="Password" class="form-control" placeholder="Enter password" required />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="ConfirmPassword">Confirm Password</label>
+                                                <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="Confirm password" required />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="FullName">Full Name</label>
+                                                <input type="text" id="FullName" name="FullName" class="form-control" placeholder="Enter full name" required />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="PhoneNumber">Phone Number</label>
+                                                <input type="tel" id="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="Enter phone number" required />
+                                            </td>
+                                        </tr>
+                                        @* <tr>
+                                            <td class="item">
+                                                <label for="BirthDate">Birth Date</label>
+                                                <input type="date" id="BirthDate" name="BirthDate" class="form-control" required />
+                                            </td>
+                                        </tr> *@
+                                        <tr>
+                                            <td class="item">
+                                                <label for="Address">Address</label>
+                                                <input type="text" id="Address" name="Address" class="form-control" placeholder="Enter address" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="item">
+                                                <label for="Gender">Gender</label>
+                                                <select id="Gender" name="Gender" class="form-control">
+                                                    <option value="1">Male</option>
+                                                    <option value="2">Female</option>
+                                                    <option value="3">Other</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="cart-buttons" style="text-align: center;">
+                                    <button type="submit" id="btnRegister" class="button dark">Register</button>
+                                    <a class="link-continue" href="@Url.Action("Index", "Home")" title="Back to Home">Back to Home</a>
+                                </div>
+
+                                <div id="registerMessage" style="color:red;margin-top:10px; text-align: center;"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#registerForm").submit(function (e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: '@Url.Action("Register", "Home")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            $("#registerMessage").css("color", "green").text("Registration successful!");
+                            setTimeout(function () {
+                                 window.location.href = '/Home/ActivateAccount?username=' + response.username;
+                            }, 1500);
+                        } else {
+                            $("#registerMessage").css("color", "red").text(response.message);
+                        }
+                    },
+                    error: function () {
+                        $("#registerMessage").css("color", "red").text("An error occurred. Please try again.");
+                    }
+                });
+            });
+        });
+    </script>
+}

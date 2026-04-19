@@ -1,0 +1,14 @@
+﻿@model JapaneseFood.Model.UserSessionDto?
+
+@if (Model != null)
+{
+    <div class="user-info">
+        <span class="title-info-top">@Model.FullName</span>&nbsp; |
+        <a href="@Url.Action("Logout", "Home")" class="logout-link">Logout</a>
+    </div>
+}
+else
+{
+    <a href="@Url.Action("Login", "Home")"><span class="title-info-top">Login | </span></a>
+    <a href="@Url.Action("Register", "Home")"><span class="title-info-top">Register</span></a>
+}

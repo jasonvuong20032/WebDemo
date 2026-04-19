@@ -1,0 +1,230 @@
+﻿@{
+    Layout = null;
+}
+<style>
+    .select2-selection--multiple {
+        border: 1px solid #e9ecef;
+    }
+
+    .select2-selection__choice {
+        padding: 2px 5px !important;
+    }
+</style>
+
+@model JapaneseFood.Model.Product.ProductDto
+<div class="row form-horizontal form-label-left" style="margin-bottom:15px;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <fieldset style="width: 100%">
+                    <legend>GENERAL INFORMATION</legend>
+                    <div class="first-step-group-criteria" style="padding-top:10px; margin-bottom: 10px;">
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="product-code">Product Code</label>
+                                @Html.TextBoxFor(model => model.Code, new { @class = "form-control", @readonly = "true" })
+                                @Html.ValidationMessageFor(model => model.Code, null, new { @id = "product-code", @class = "label label-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="menu-name">Product Name</label>
+                                @Html.HiddenFor(model => model.Id)
+                                @Html.HiddenFor(model => model.CreatedBy)
+                                @Html.HiddenFor(model => model.CreatedAt)
+                                @Html.HiddenFor(model => model.Code)
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "Enter product name" })
+                                @Html.ValidationMessageFor(model => model.Name, null, new { @id = "menu-name", @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="menu-type">Select Category</label>
+                                @Html.DropDownListFor(model => model.CategoryId,
+                                new SelectList(Model.Categories, "Value", "Text", Model.CategoryId),
+                                                                null,
+                                                                new
+                                                                {
+                                                                    @class = "form-control cc-select2 custom-select",
+                                                                    @style = "width:100%;"
+                                                                })
+                                @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "label label-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="price">Product Price</label>
+                                @Html.TextBoxFor(model => model.Price, new { @type = "number", @class = "form-control", placeholder = "Enter product price" })
+                                @Html.ValidationMessageFor(model => model.Price, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox mr-sm-2">
+                                        @Html.CheckBoxFor(model => model.IsOnSale,
+                                            new { @class = "icheck custom-control-input", @id = "IsOnSale" })
+                                        <label class="custom-control-label" for="IsOnSale">OnPrice</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="price">Sale Price</label>
+                                @Html.TextBoxFor(model => model.SalePrice, new { @type = "number", @class = "form-control", placeholder = "Enter product price" })
+                                @Html.ValidationMessageFor(model => model.SalePrice, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="price">Quantity</label>
+                                @Html.TextBoxFor(model => model.Quantity, new { @type = "number", @class = "form-control", placeholder = "Enter Quantity" })
+                                @Html.ValidationMessageFor(model => model.Quantity, null, new { @class = "label label-danger" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="price">Address</label>
+                                @Html.TextBoxFor(model => model.Address, new { @type = "text", @class = "form-control", placeholder = "Enter Address" })
+                                @Html.ValidationMessageFor(model => model.Address, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="price">Latitude</label>
+                                @Html.TextBoxFor(model => model.Latitude, new { @type = "number", @class = "form-control", placeholder = "Enter Latitude" })
+                                @Html.ValidationMessageFor(model => model.Latitude, null, new { @class = "label label-danger" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="price">Longitude</label>
+                                @Html.TextBoxFor(model => model.Longitude, new { @type = "number", @class = "form-control", placeholder = "Enter Longitude" })
+                                @Html.ValidationMessageFor(model => model.Longitude, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox mr-sm-2">
+                                        @Html.CheckBoxFor(model => model.IsAvailable,
+                                            new { @class = "icheck custom-control-input", @id = "IsAvailable" })
+                                        <label class="custom-control-label" for="IsAvailable">IsAvailable</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="menu-type">Discount(Optional)</label>
+                                @Html.DropDownListFor(model => model.DiscountId,
+                                                                new SelectList(Model.Discounts, "Value", "Text", Model.DiscountId),
+                                                                null,
+                                                                new
+                                                                {
+                                                                    @class = "form-control cc-select2 custom-select",
+                                                                    @style = "width:100%;"
+                                                                })
+                                @Html.ValidationMessageFor(model => model.DiscountId, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label class="control-label fontLighter">Short Description</label>
+                                @Html.TextAreaFor(model => model.ShortDescription, new
+                                                                {
+                                    @class = "form-control",
+                                                                placeholder = "Enter short description",
+                                                                @style = "height:   75px;"
+                                                                })
+                                @Html.ValidationMessageFor(model => model.ShortDescription, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label class="control-label fontLighter">Description</label>
+                                <div id="editor" style="height:300px"></div>
+                                <input type="hidden"
+                                       id="Description"
+                                       name="Description"
+                                       value="@Model.Description" />
+
+                                @* @Html.TextAreaFor(model => model.Description, new { @class = "form-control", placeholder = "Enter description" }) *@
+                                @Html.ValidationMessageFor(model => model.Description, null, new { @class = "label label-danger" })
+                            </div>
+                        </div>                        
+                                                
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox mr-sm-2">
+                                        @Html.CheckBoxFor(model => model.IsActive,
+                                            new { @class = "icheck custom-control-input", @id = "active" })
+                                        <label class="custom-control-label" for="active">Active</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <a href="@Url.Action("Index", "ProductMng")" class="btn btn-default">Cancel</a>
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </div>
+
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.cc-select2').select2({
+            placeholder: "Select product colors",
+            allowClear: false,
+            tags: true,
+            closeOnSelect: true
+        });
+
+        $('.cc-select2-size').select2({
+            placeholder: "Select product sizes"
+        });
+
+        $("select").on("select2:select", function (evt) {
+            var element = evt.params.data.element;
+            var $element = $(element);
+            $element.detach();
+            $(this).append($element);
+            $(this).trigger("change");
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Enter content...',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    [{ header: [1, 2, 3, false] }],
+                    ['link', 'image'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Load data khi edit / validation fail
+        var existing = document.getElementById('Description').value;
+        if (existing) {
+            quill.root.innerHTML = existing;
+        }
+
+        var form = document.getElementById('form-create');
+
+        form.addEventListener('submit', function () {
+            document.getElementById('Description').value =
+                quill.root.innerHTML;
+        });
+    });
+</script>

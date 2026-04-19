@@ -1,0 +1,13 @@
+﻿<nav id="menu-mobile" class="hidden">
+    <ul>
+        <li class=""><a href="@Url.Action("Index","About")" title="Thông tin">Thông tin</a></li>
+        <li class=""><a href="@Url.Action("Index","Contact")" title="Liên hệ">Liên hệ</a></li>
+        <li class="has-children ">
+            <a href="@Url.Action("Index", "Product", new { q = "" })">Sản phẩm</a>
+            <ul class="child count-nav-6">
+                <li><a href="@Url.Action("Index", "Product", new { q = "1" })">Sản phẩm 1</a></li>
+            </ul>
+        </li>
+        <li class=""><a href="@Url.Action("Index", "Product", new { q = "1" })">Sản phẩm</a></li>
+    </ul>
+</nav>

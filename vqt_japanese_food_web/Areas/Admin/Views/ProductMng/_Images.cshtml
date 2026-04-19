@@ -1,0 +1,206 @@
+﻿@{
+    Layout = null;
+}
+<link href="@Url.Content("~/Content/assets/node_modules/TouchSpin/jquery.bootstrap-touchspin.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Content/assets/node_modules/TouchSpin/jquery.bootstrap-touchspin.js")"></script>
+<style>
+    .select2-container {
+        border: 1px solid #e9ecef;
+    }
+</style>
+@model JapaneseFood.Model.Product.ProductImageDto
+<div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset style="width:100%">
+                        <legend>IMAGES INFORMATION</legend>
+                        <div class="table-responsive m-t-40">
+                            <table id="config-table" class="table display table-bordered table-striped no-wrap">
+                                <thead>
+                                    <tr>
+                                        <th width="20%">.No</th>
+                                        <th width="20%">Image</th>
+                                        <th>ALT</th>
+                                        <th>Title</th>
+                                        <th width="7%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Images.Any())
+                                    {
+                                        foreach (var item in Model.Images)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <input type="text" style="max-width:70px; text-align:right" data-id="@item.Id" name="TouchSpinSort" class="form-control" value="@item.SortOrder" />
+                                                </td>
+                                                <td><img height="100" width="150" src="@Url.Content(item.ImageUrl)" alt="@item.Alt" title="@item.Title" /></td>
+                                                <td>@item.Alt</td>
+                                                <td>@item.Title</td>
+                                                <td>
+                                                    <div class="btn-group btn-group-1 pull-right">
+                                                        <a href="@Url.Action("DestroyImage", "ProductMng", new { Id = item.Id })" class="btn btn-default btn-sm" data-confirm="Do you want delete ?" data-toggle="tooltip" data-placement="bottom" title="Delete">
+                                                            <i class="fa fa-fw fa-trash text-danger"></i>
+                                                            Delete
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="card-header bg-info" style="background:#f5f5f5 !important; color: #333;">
+                            <h4 class="m-b-0">Add image</h4>
+                        </div>
+                        <div class="form-body" style="margin-top:15px;">
+                            @using (Html.BeginForm("CreatePicture", "ProductMng", FormMethod.Post, new { @id = "form-create-image", @class = "form-horizontal needs-validation", @enctype = "multipart/form-data" }))
+                            {
+                                <div class="form-row">
+                                    <div class="col-md-2 mb-3 text-right">Image</div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <input type="hidden" name="ProductId" value="@Model.ProductId" />
+
+                                        <img id="upload-preview"
+                                             src="@Url.Content("~/Uploads/Product/default-image_100.png")"
+                                             height="150" width="200" />
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        <div class="upload-btn-wrapper">
+                                            <button type="button"
+                                                    class="btn btn-success"
+                                                    onclick="showPictureUpload();">
+                                                Upload recomment (px) (450 × 600)
+                                            </button>
+
+                                            <input type="file"
+                                                   name="PictureUpload"
+                                                   id="urlImage"
+                                                   accept=".jpg"
+                                                   class="d-none"
+                                                   onchange="PreviewImage(this,'upload-preview')" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-2 mb-3 text-right">Alt</div>
+                                    <div class="col-md-5 mb-3">
+                                        <input type="text"
+                                               name="Alt"
+                                               class="form-control information"
+                                               placeholder="Enter alt text" />
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-2 mb-3 text-right">Title</div>
+                                    <div class="col-md-5 mb-3">
+                                        <input type="text"
+                                               name="Title"
+                                               class="form-control information"
+                                               placeholder="Title" />
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-2 mb-3 text-right">Sort Order</div>
+                                    <div class="col-md-5 mb-3">
+                                        <input type="number"
+                                               name="SortOrder"
+                                               class="form-control information"
+                                               value="1" />
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-2 mb-3"></div>
+                                    <div class="col-md-3 mb-3">
+                                        <button type="submit"
+                                                class="btn btn-success">
+                                            Add Product Image
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </fieldset>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('.cc-select2').select2({
+        placeholder: "Selected product"
+    })
+
+    $("input[name='TouchSpinSort']").TouchSpin({
+        initval: 40
+    });
+
+    $("input[name='TouchSpinSort']").on('change', function () {
+        var Id = $(this).data('id')
+        var Sort = $(this).val()
+        $.ajax({
+            url: '@Url.Action("QuickUpdate", "ProductMng")',
+            type: "post",
+            data: { Id: Id, Sort: Sort },
+            success: function (data) {
+                if (data.ok == true) {
+                    ShowToastMessage("Image order updated successfully.", 'success', 'Success')
+                }
+                else {
+                        ShowToastMessage("Image order update failed.", 'error', 'Error')
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {}
+        });
+    })
+    
+
+    $("#form-create-image").submit(function (e) {
+        $.ajax({
+            url: $(this).attr('action'),
+            type: "post",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $('.image-management').html(data)
+                $('.information').val('')
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+        e.preventDefault();
+    });
+
+    $('#config-table').DataTable({
+        responsive: true,
+        pageLength: 3,
+        lengthMenu: [3, 10, 50, 100]
+    });
+
+    function showPictureUpload() {
+        $('[id=urlImage]').click();
+    }
+
+    function PreviewImage(e, previewElementID) {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(e.files[0]);
+
+        oFReader.onload = function (oFREvent) {
+            document.getElementById(previewElementID).src = oFREvent.target.result;
+        };
+    };
+</script>
